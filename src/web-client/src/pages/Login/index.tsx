@@ -13,7 +13,8 @@ const LoginPage: React.FC = () => {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setUsername(usernameInputValue);
-        history.push('/chat');
+        //Wait for useEffect/ComponentDidMount call of useLocalStorage
+        setTimeout(() => history.push('/chat'), 10);
     };
 
     return (
