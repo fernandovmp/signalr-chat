@@ -1,0 +1,18 @@
+.message-balloon {
+    width: fit-content;
+    max-width: 30%;
+    font-size: small;
+    padding: 4px 4px 0 4px;
+}
+
+.message {
+    margin-top: 4px;
+    margin-bottom: 0;
+}
+
+.message-date {
+    margin-top: 4px;
+    margin-bottom: 2px;
+    text-align: right;
+    font-size: smaller;
+}
