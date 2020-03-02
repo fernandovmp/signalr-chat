@@ -1,13 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import './styles.css';
 import Message from '../../models/Message';
 import MessageBalloon from '../../components/MessageBalloon';
+import { IChatService } from '../../services/chatService';
 
-const ChatPage: React.FC = () => {
+type propsType = {
+    chatService: IChatService;
+};
+
+const ChatPage: React.FC<propsType> = ({ chatService }) => {
     const [username] = useLocalStorage('username', '');
     const [messages, setMessages] = useState<Message[]>([]);
     const [messageInputValue, setMessageInputValue] = useState('');
+
+    useEffect(() => {
+        chatService.connectToChat(message => {
+            setMessages(previousState => [...previousState, message]);
+        });
+    }, [chatService]);
 
     const handleSend = async () => {
         const message: Message = {
@@ -15,7 +26,7 @@ const ChatPage: React.FC = () => {
             content: messageInputValue,
             date: new Date()
         };
-        setMessages(previousState => [...previousState, message]);
+        await chatService.sendMessageAsync(message);
         setMessageInputValue('');
     };
 
