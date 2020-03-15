@@ -15,9 +15,16 @@ const ChatPage: React.FC<propsType> = ({ chatService }) => {
     const [messageInputValue, setMessageInputValue] = useState('');
 
     useEffect(() => {
-        chatService.connectToChat(message => {
-            setMessages(previousState => [...previousState, message]);
-        });
+        const setupChatAsync = async () => {
+            await chatService.joinChatAsync(username);
+            chatService.onUserJoined(user => {
+                alert(`${user} juntou-se ao chat`);
+            });
+            chatService.connectToChat(message => {
+                setMessages(previousState => [...previousState, message]);
+            });
+        };
+        setupChatAsync();
     }, [chatService]);
 
     const handleSend = async () => {
