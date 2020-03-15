@@ -16,7 +16,6 @@ export class ChatService implements IChatService {
         this.connection = new signalR.HubConnectionBuilder()
             .withUrl(url)
             .build();
-        this.connection.start();
     }
 
     async joinChatAsync(username: string): Promise<void> {

@@ -16,6 +16,7 @@ const ChatPage: React.FC<propsType> = ({ chatService }) => {
 
     useEffect(() => {
         const setupChatAsync = async () => {
+            await chatService.connection.start();
             await chatService.joinChatAsync(username);
             chatService.onUserJoined(user => {
                 alert(`${user} juntou-se ao chat`);
