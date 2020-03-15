@@ -21,7 +21,7 @@ const ChatPage: React.FC<propsType> = ({ chatService }) => {
             chatService.onUserJoined(user => {
                 alert(`${user} juntou-se ao chat`);
             });
-            chatService.connectToChat(message => {
+            chatService.onReceiveMessage(message => {
                 setMessages(previousState => [...previousState, message]);
             });
         };
