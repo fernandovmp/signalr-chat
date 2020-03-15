@@ -3,6 +3,8 @@ import Message from '../models/Message';
 
 export interface IChatService {
     readonly connection: signalR.HubConnection;
+    joinChatAsync(username: string): Promise<void>;
+    onUserJoined(action: (username: string) => void): void;
     connectToChat(action: (message: Message) => void): void;
     sendMessageAsync(message: Message): Promise<void>;
 }
@@ -15,6 +17,14 @@ export class ChatService implements IChatService {
             .withUrl(url)
             .build();
         this.connection.start();
+    }
+
+    async joinChatAsync(username: string): Promise<void> {
+        await this.connection.send('joinChat', username);
+    }
+
+    onUserJoined(action: (username: string) => void): void {
+        this.connection.on('userJoined', action);
     }
 
     connectToChat(action: (message: Message) => void): void {
