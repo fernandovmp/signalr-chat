@@ -1,0 +1,13 @@
+.join-notification {
+    text-align: center;
+    background: rgba(0, 0, 0, 0.75);
+    color: white;
+    height: 20px;
+    width: fit-content;
+    padding: 4px;
+}
+
+.join-notification p {
+    margin: 0;
+    font-size: small;
+}
