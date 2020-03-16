@@ -4,6 +4,7 @@ import './styles.css';
 import Message from '../../models/Message';
 import MessageBalloon from '../../components/MessageBalloon';
 import { IChatService } from '../../services/chatService';
+import JoinNotification from '../../components/JoinNotification';
 
 type propsType = {
     chatService: IChatService;
@@ -12,6 +13,9 @@ type propsType = {
 const ChatPage: React.FC<propsType> = ({ chatService }) => {
     const [username] = useLocalStorage('username', '');
     const [messages, setMessages] = useState<Message[]>([]);
+    const [joinedNotifications, setjoinedNotifications] = useState<string[]>(
+        []
+    );
     const [messageInputValue, setMessageInputValue] = useState('');
 
     useEffect(() => {
@@ -19,7 +23,18 @@ const ChatPage: React.FC<propsType> = ({ chatService }) => {
             await chatService.connection.start();
             await chatService.joinChatAsync(username);
             chatService.onUserJoined(user => {
-                alert(`${user} juntou-se ao chat`);
+                setjoinedNotifications(previousState =>
+                    previousState.concat(user)
+                );
+                setTimeout(
+                    () =>
+                        setjoinedNotifications(previousState =>
+                            previousState.filter(
+                                notification => notification !== user
+                            )
+                        ),
+                    6000
+                );
             });
             chatService.onReceiveMessage(message => {
                 setMessages(previousState => [...previousState, message]);
@@ -66,6 +81,11 @@ const ChatPage: React.FC<propsType> = ({ chatService }) => {
                         <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
                     </svg>
                 </button>
+            </div>
+            <div className="chat-notification-container">
+                {joinedNotifications.map(joinedUser => (
+                    <JoinNotification username={joinedUser} />
+                ))}
             </div>
         </div>
     );

@@ -43,3 +43,18 @@
 .chat-input-area button:hover {
     cursor: pointer;
 }
+
+.chat-notification-container {
+    position: relative;
+    float: right;
+    margin-top: -68px;
+    margin-right: 16px;
+    display: flex;
+    flex-direction: column-reverse;
+    transform: rotatex(180deg);
+    transform-origin: top;
+}
+
+.chat-notification-container div {
+    transform: rotatex(180deg);
+}
