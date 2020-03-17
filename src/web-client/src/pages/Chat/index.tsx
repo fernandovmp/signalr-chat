@@ -5,6 +5,7 @@ import Message from '../../models/Message';
 import MessageBalloon from '../../components/MessageBalloon';
 import { IChatService } from '../../services/chatService';
 import JoinNotification from '../../components/JoinNotification';
+import { useHistory } from 'react-router-dom';
 
 type propsType = {
     chatService: IChatService;
@@ -17,6 +18,7 @@ const ChatPage: React.FC<propsType> = ({ chatService }) => {
         []
     );
     const [messageInputValue, setMessageInputValue] = useState('');
+    const history = useHistory();
 
     useEffect(() => {
         const setupChatAsync = async () => {
@@ -40,6 +42,11 @@ const ChatPage: React.FC<propsType> = ({ chatService }) => {
                 setMessages(previousState => [...previousState, message]);
             });
         };
+
+        if (username.trim() === '') {
+            history.push('/');
+            return;
+        }
         setupChatAsync();
     }, [chatService]);
 
