@@ -32,6 +32,7 @@ namespace SignalRChat.Server
 
             services.AddCors();
             services.AddSignalR();
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,6 +55,7 @@ namespace SignalRChat.Server
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<ChatHub>("/chatHub");
+                endpoints.MapControllers();
             });
         }
     }
