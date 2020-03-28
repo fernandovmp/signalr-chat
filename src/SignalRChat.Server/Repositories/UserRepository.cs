@@ -29,5 +29,10 @@ namespace SignalRChat.Server.Repositories
             string query = "select id, username from users;";
             return await _connection.QueryAsync<User>(query);
         }
+        public async Task<User> GetByUsername(string username)
+        {
+            string query = "select id, username from users where username = @Username;";
+            return await _connection.QueryFirstOrDefaultAsync(query, new { Username = username });
+        }
     }
 }

@@ -8,6 +8,7 @@ namespace SignalRChat.Server.Repositories
     {
         Task CreateUser(User user);
         Task<IEnumerable<User>> GetAll();
+        Task<User> GetByUsername(string username);
         Task<bool> Exists(string username);
     }
 }
