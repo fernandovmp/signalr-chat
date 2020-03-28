@@ -50,5 +50,16 @@ namespace SignalRChat.Server.Controllers
             await _userRepository.CreateUser(user);
             return Ok(user);
         }
+
+        [HttpPost("authenticate")]
+        public async Task<ActionResult<User>> Authenticate(User data)
+        {
+            User user = await _userRepository.GetByUsername(data.Username);
+            if (user is null)
+            {
+                return BadRequest(new { Error = "User not found", data.Username });
+            }
+            return Ok(user);
+        }
     }
 }
