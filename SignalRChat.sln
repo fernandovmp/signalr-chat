@@ -7,6 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{705E0553-E67
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRChat.Server", "src\SignalRChat.Server\SignalRChat.Server.csproj", "{0D0D6D5B-DC69-47C8-8F26-1AE463AA5470}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRChat.Domain", "src\SignalRChat.Domain\SignalRChat.Domain.csproj", "{88691F5C-C915-4290-8F1D-5E5D1BC9C2D6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,8 +34,21 @@ Global
 		{0D0D6D5B-DC69-47C8-8F26-1AE463AA5470}.Release|x64.Build.0 = Release|Any CPU
 		{0D0D6D5B-DC69-47C8-8F26-1AE463AA5470}.Release|x86.ActiveCfg = Release|Any CPU
 		{0D0D6D5B-DC69-47C8-8F26-1AE463AA5470}.Release|x86.Build.0 = Release|Any CPU
+		{88691F5C-C915-4290-8F1D-5E5D1BC9C2D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88691F5C-C915-4290-8F1D-5E5D1BC9C2D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88691F5C-C915-4290-8F1D-5E5D1BC9C2D6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{88691F5C-C915-4290-8F1D-5E5D1BC9C2D6}.Debug|x64.Build.0 = Debug|Any CPU
+		{88691F5C-C915-4290-8F1D-5E5D1BC9C2D6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{88691F5C-C915-4290-8F1D-5E5D1BC9C2D6}.Debug|x86.Build.0 = Debug|Any CPU
+		{88691F5C-C915-4290-8F1D-5E5D1BC9C2D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88691F5C-C915-4290-8F1D-5E5D1BC9C2D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88691F5C-C915-4290-8F1D-5E5D1BC9C2D6}.Release|x64.ActiveCfg = Release|Any CPU
+		{88691F5C-C915-4290-8F1D-5E5D1BC9C2D6}.Release|x64.Build.0 = Release|Any CPU
+		{88691F5C-C915-4290-8F1D-5E5D1BC9C2D6}.Release|x86.ActiveCfg = Release|Any CPU
+		{88691F5C-C915-4290-8F1D-5E5D1BC9C2D6}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{0D0D6D5B-DC69-47C8-8F26-1AE463AA5470} = {705E0553-E67B-45D8-BBD8-9805EA88D1B7}
+		{88691F5C-C915-4290-8F1D-5E5D1BC9C2D6} = {705E0553-E67B-45D8-BBD8-9805EA88D1B7}
 	EndGlobalSection
 EndGlobal
