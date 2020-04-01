@@ -117,7 +117,7 @@ namespace SignalRChat.Domain.Tests.Handlers
 
             ICommandResult result = await handler.HandleAsync(command);
 
-            result.Should().BeOfType(typeof(CreateUserCommandResult));
+            result.Data.Should().NotBeNull();
             result.Success.Should().BeTrue();
             handler.Valid.Should().BeTrue();
         }

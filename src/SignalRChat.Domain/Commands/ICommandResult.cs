@@ -4,5 +4,6 @@ namespace SignalRChat.Domain.Commands
     {
         bool Success { get; }
         string Message { get; }
+        object Data { get; }
     }
 }

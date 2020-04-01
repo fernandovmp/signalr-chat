@@ -20,7 +20,7 @@ namespace SignalRChat.Domain.Handlers
             if (command.Invalid)
             {
                 AddNotifications(command);
-                return new CommandResult(false, "Could not create user");
+                return new CommandResult(false, "Could not create user", null);
             }
 
             if (await _repository.Exists(command.Username))
@@ -32,12 +32,16 @@ namespace SignalRChat.Domain.Handlers
             AddNotifications(user);
             if (Invalid)
             {
-                return new CommandResult(false, "Could not create user");
+                return new CommandResult(false, "Could not create user", null);
             }
 
             await _repository.CreateUser(user);
 
-            return new CreateUserCommandResult(true, "User succesfully created", user);
+            return new CommandResult(true, "User succesfully created", new
+            {
+                user.Id,
+                user.Username
+            });
         }
     }
 }
