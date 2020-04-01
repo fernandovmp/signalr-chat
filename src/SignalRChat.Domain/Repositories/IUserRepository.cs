@@ -1,14 +1,15 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using SignalRChat.Domain.Entities;
+using SignalRChat.Domain.Queries;
 
 namespace SignalRChat.Domain.Repositories
 {
     public interface IUserRepository
     {
         Task CreateUser(User user);
-        Task<IEnumerable<User>> GetAll();
-        Task<User> GetByUsername(string username);
+        Task<IEnumerable<ListUsersQueryResult>> ListUsers();
+        Task<GetByUsernameQueryResult> GetByUsername(string username);
         Task<bool> Exists(string username);
     }
 }

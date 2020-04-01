@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SignalRChat.Domain.Commands;
 using SignalRChat.Domain.Handlers;
+using SignalRChat.Domain.Queries;
 using SignalRChat.Domain.Repositories;
 using SignalRChat.Server.Models;
 using SignalRChat.Server.ViewModels;
@@ -24,7 +25,7 @@ namespace SignalRChat.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetAllUsers()
         {
-            return Ok(await _userRepository.GetAll());
+            return Ok(await _userRepository.ListUsers());
         }
 
         [HttpPost]
@@ -58,7 +59,7 @@ namespace SignalRChat.Server.Controllers
         [HttpPost("authenticate")]
         public async Task<ActionResult<User>> Authenticate(User data)
         {
-            var user = await _userRepository.GetByUsername(data.Username);
+            GetByUsernameQueryResult user = await _userRepository.GetByUsername(data.Username);
             if (user is null)
             {
                 return BadRequest(new { Error = "User not found", data.Username });
