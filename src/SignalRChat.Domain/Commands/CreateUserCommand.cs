@@ -11,9 +11,9 @@ namespace SignalRChat.Domain.Commands
         {
             AddNotifications(new Contract()
                 .Requires()
-                .IsNotNullOrWhiteSpace(Username, $"{nameof(User)}.{nameof(Username)}",
-                    $"Username can't be null or white spaces")
-                .HasMaxLen(Username, 32, $"{nameof(User)}.{nameof(Username)}",
+                .IsNotNullOrWhiteSpace(Username, nameof(Username),
+                    "Username can't be null or white spaces")
+                .HasMaxLen(Username, 32, nameof(Username),
                     "Username should be at maximum 32 characters"));
         }
     }
