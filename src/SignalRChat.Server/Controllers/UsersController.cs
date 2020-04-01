@@ -1,9 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using SignalRChat.Domain.Commands;
+using SignalRChat.Domain.Handlers;
+using SignalRChat.Domain.Repositories;
 using SignalRChat.Server.Models;
-using SignalRChat.Server.Repositories;
+using SignalRChat.Server.ViewModels;
 
 namespace SignalRChat.Server.Controllers
 {
@@ -24,37 +28,37 @@ namespace SignalRChat.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<User>> CreateUser(User data)
+        public async Task<ActionResult<User>> CreateUser(User data, [FromServices] IHandler<CreateUserCommand> createUserHandler)
         {
-            if (await _userRepository.Exists(data.Username))
+            var command = new CreateUserCommand
             {
-                return Conflict(new
-                {
-                    Message = "User already exists"
-                });
-            }
-
-            if (data.Username.Length > 32)
-            {
-                return UnprocessableEntity(new
-                {
-                    Error = "username should be at maximum 32 characters"
-                });
-            }
-
-            var user = new User
-            {
-                Id = Guid.NewGuid(),
                 Username = data.Username
             };
-            await _userRepository.CreateUser(user);
-            return Ok(user);
+            ICommandResult result = await createUserHandler.HandleAsync(command);
+            if (!result.Success)
+            {
+                var handler = createUserHandler as CreateUserHandler;
+                if (handler.Notifications.Any(notification => notification.Message == "User already exists"))
+                {
+                    return Conflict(new ErrorViewModel
+                    {
+                        Message = "User already exists",
+                        Errors = handler.Notifications.Select(notification => (object)notification).ToList()
+                    });
+                }
+                return UnprocessableEntity(new ErrorViewModel
+                {
+                    Message = "Could not process this user",
+                    Errors = handler.Notifications.Select(notification => (object)notification).ToList()
+                });
+            }
+            return Ok(result.Data);
         }
 
         [HttpPost("authenticate")]
         public async Task<ActionResult<User>> Authenticate(User data)
         {
-            User user = await _userRepository.GetByUsername(data.Username);
+            var user = await _userRepository.GetByUsername(data.Username);
             if (user is null)
             {
                 return BadRequest(new { Error = "User not found", data.Username });

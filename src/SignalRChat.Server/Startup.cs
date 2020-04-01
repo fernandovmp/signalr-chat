@@ -10,8 +10,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SignalRChat.Domain.Commands;
+using SignalRChat.Domain.Entities;
+using SignalRChat.Domain.Handlers;
+using SignalRChat.Domain.Repositories;
+using SignalRChat.Infrastructure.Data.Repositories;
 using SignalRChat.Server.Hubs;
-using SignalRChat.Server.Repositories;
+using SignalRChat.Server.ViewModels;
 
 namespace SignalRChat.Server
 {
@@ -29,6 +34,8 @@ namespace SignalRChat.Server
             services.AddTransient<IDbConnection>(sp =>
                 new SqlConnection(Configuration.GetConnectionString("ConnectionString")));
             services.AddScoped<IUserRepository, UserRepository>();
+
+            services.AddScoped<IHandler<CreateUserCommand>, CreateUserHandler>();
 
             services.AddCors();
             services.AddSignalR();

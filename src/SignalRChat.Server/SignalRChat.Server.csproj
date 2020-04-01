@@ -5,8 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="Dapper" Version="2.0.30" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SignalRChat.Domain\SignalRChat.Domain.csproj" />
+    <ProjectReference Include="..\SignalRChat.Infrastructure\SignalRChat.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
