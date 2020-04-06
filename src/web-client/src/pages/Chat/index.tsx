@@ -6,13 +6,17 @@ import MessageBalloon from '../../components/MessageBalloon';
 import { IChatService } from '../../services/chatService';
 import JoinNotification from '../../components/JoinNotification';
 import { useHistory } from 'react-router-dom';
+import User from '../../models/User';
 
 type propsType = {
     chatService: IChatService;
 };
 
 const ChatPage: React.FC<propsType> = ({ chatService }) => {
-    const [username] = useLocalStorage('username', '');
+    const [user] = useLocalStorage<User>('user', {
+        id: '',
+        username: ''
+    });
     const [messages, setMessages] = useState<Message[]>([]);
     const [joinedNotifications, setjoinedNotifications] = useState<string[]>(
         []
@@ -23,7 +27,7 @@ const ChatPage: React.FC<propsType> = ({ chatService }) => {
     useEffect(() => {
         const setupChatAsync = async () => {
             await chatService.connection.start();
-            await chatService.joinChatAsync(username);
+            await chatService.joinChatAsync(user.username);
             chatService.onUserJoined(user => {
                 setjoinedNotifications(previousState =>
                     previousState.concat(user)
@@ -42,8 +46,8 @@ const ChatPage: React.FC<propsType> = ({ chatService }) => {
                 setMessages(previousState => [...previousState, message]);
             });
         };
-
-        if (username.trim() === '') {
+        console.log(user);
+        if (user.username.trim() === '') {
             history.push('/');
             return;
         }
@@ -52,7 +56,7 @@ const ChatPage: React.FC<propsType> = ({ chatService }) => {
 
     const handleSend = async () => {
         const message: Message = {
-            sender: username,
+            sender: user.username,
             content: messageInputValue,
             date: new Date()
         };

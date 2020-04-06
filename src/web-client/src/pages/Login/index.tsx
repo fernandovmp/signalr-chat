@@ -2,18 +2,42 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import './styles.css';
+import { IChatApiService } from '../../services/chatApiService';
+import User from '../../models/User';
 
-const LoginPage: React.FC = () => {
-    const [username, setUsername] = useLocalStorage<string>('username', '');
+type propsType = {
+    chatApiService: IChatApiService;
+};
+
+const LoginPage: React.FC<propsType> = ({ chatApiService }) => {
+    const [user, setUser] = useLocalStorage<User>('user', {
+        id: '',
+        username: ''
+    });
     const [usernameInputValue, setUsernameInputValue] = useState<string>(
-        username
+        user.username
     );
     const history = useHistory();
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (usernameInputValue.trim() === '') return;
-        setUsername(usernameInputValue);
+        let authenticatedUser: User;
+        try {
+            authenticatedUser = await chatApiService.authenticate(
+                usernameInputValue
+            );
+        } catch (error) {
+            try {
+                authenticatedUser = await chatApiService.createUser(
+                    usernameInputValue
+                );
+            } catch (error) {
+                console.error(error);
+                return;
+            }
+        }
+        setUser(authenticatedUser);
         //Wait for useEffect/ComponentDidMount call of useLocalStorage
         setTimeout(() => history.push('/chat'), 10);
     };
