@@ -6,9 +6,9 @@ namespace SignalRChat.Domain.Entities
 {
     public class User : Notifiable
     {
-        public User(string username)
+        public User(Guid id, string username)
         {
-            Id = Guid.NewGuid();
+            Id = id;
             Username = username;
             AddNotifications(new Contract()
                 .Requires()
@@ -17,6 +17,10 @@ namespace SignalRChat.Domain.Entities
                 .HasMaxLen(Username, 32, nameof(Username),
                     "Username should be at maximum 32 characters"));
         }
+        public User(string username) : this(Guid.NewGuid(), username)
+        {
+        }
+
         public Guid Id { get; private set; }
         public string Username { get; private set; }
     }
