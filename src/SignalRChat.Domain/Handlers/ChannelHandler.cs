@@ -11,7 +11,8 @@ namespace SignalRChat.Domain.Handlers
     public class ChannelHandler : Notifiable,
         IHandler<CreateChannelCommand>,
         IHandler<UpdateChannelNameCommand>,
-        IHandler<UpdateChannelDescriptionCommand>
+        IHandler<UpdateChannelDescriptionCommand>,
+        IHandler<DeleteChannelCommand>
     {
         private readonly IChannelRepository _channelRepository;
         private readonly IUserRepository _userRepository;
@@ -121,6 +122,29 @@ namespace SignalRChat.Domain.Handlers
                 Id = command.Id,
                 Description = command.Description
             });
+        }
+
+        public async Task<ICommandResult> HandleAsync(DeleteChannelCommand command)
+        {
+            command.Validate();
+            if (command.Invalid)
+            {
+                AddNotifications(command);
+                return new CommandResult(false, "Could not delete this channel", null);
+            }
+            GetChannelByIdQueryResult channel = await _channelRepository.GetById(command.ChannelId);
+            if (channel is null)
+            {
+                AddNotification(nameof(command.ChannelId), "Channel not found");
+                return new CommandResult(false, "Could not delete this channel", null);
+            }
+            if (channel.AdministratorId != command.AdministratorId)
+            {
+                AddNotification(nameof(command.AdministratorId), "AdministratorId does't match channel administrator id");
+                return new CommandResult(false, "User does't have permission to delete this channel", null);
+            }
+            await _channelRepository.DeleteChannel(channel.Id);
+            return new CommandResult(true, "Channel successfully deleted", null);
         }
     }
 }
