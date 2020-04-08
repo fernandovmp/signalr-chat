@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using SignalRChat.Domain.Commands;
+using SignalRChat.Domain.DataOutputs;
 using SignalRChat.Domain.Entities;
 using SignalRChat.Domain.Handlers;
 using SignalRChat.Domain.Queries;
@@ -148,10 +149,15 @@ namespace SignalRChat.Domain.Tests.Handlers
             var handler = new ChannelHandler(fakeChannelRepository.Object, fakeUserRepository.Object);
 
             ICommandResult result = await handler.HandleAsync(command);
+            var resultOutput = result.Data as ChannelOutput;
 
             result.Success.Should().BeTrue();
-            handler.Valid.Should().BeTrue();
             result.Data.Should().NotBeNull();
+            resultOutput.Should().NotBeNull();
+            resultOutput?.Id.Should().NotBeEmpty();
+            resultOutput?.Administrator.Should().NotBeNull();
+            resultOutput?.Administrator?.Id.Should().Be(administratorId);
+            handler.Valid.Should().BeTrue();
             fakeChannelRepository.Verify(
                 repository => repository.CreateChannel(It.IsAny<Channel>()),
                 Times.Once());
@@ -191,10 +197,15 @@ namespace SignalRChat.Domain.Tests.Handlers
             var handler = new ChannelHandler(fakeChannelRepository.Object, fakeUserRepository.Object);
 
             ICommandResult result = await handler.HandleAsync(command);
+            var resultOutput = result.Data as ChannelOutput;
 
             handler.Valid.Should().BeTrue();
             result.Success.Should().BeTrue();
             result.Data.Should().NotBeNull();
+            resultOutput.Should().NotBeNull();
+            resultOutput?.Id.Should().NotBeEmpty();
+            resultOutput?.Administrator.Should().NotBeNull();
+            resultOutput?.Administrator?.Id.Should().Be(command.AdministratorId);
             fakeChannelRepository.Verify(
                 repository => repository.CreateChannel(It.IsAny<Channel>()),
                 Times.Once());

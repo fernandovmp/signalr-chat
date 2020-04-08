@@ -49,12 +49,16 @@ namespace SignalRChat.Domain.Handlers
 
             await _channelRepository.CreateChannel(channel);
 
-            return new CommandResult(true, "Channel succesfully created", new
+            return new CommandResult(true, "Channel succesfully created", new ChannelOutput
             {
-                channel.Id,
-                channel.Name,
-                channel.Description,
-                Administrator = user
+                Id = channel.Id,
+                Name = channel.Name,
+                Description = channel.Description,
+                Administrator = new UserOutput
+                {
+                    Id = administrator.Id,
+                    Username = administrator.Username
+                }
             });
         }
 
