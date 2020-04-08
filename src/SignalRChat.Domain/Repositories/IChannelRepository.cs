@@ -10,5 +10,6 @@ namespace SignalRChat.Domain.Repositories
         Task CreateChannel(Channel channel);
         Task<GetChannelByIdQueryResult> GetById(Guid id);
         Task UpdateChannelName(Guid id, string name);
+        Task UpdateChannelDescription(Guid id, string description);
     }
 }
