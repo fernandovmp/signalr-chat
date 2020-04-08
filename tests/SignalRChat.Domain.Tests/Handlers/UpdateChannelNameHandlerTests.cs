@@ -54,6 +54,24 @@ namespace SignalRChat.Domain.Tests.Handlers
             handler.Invalid.Should().BeTrue();
         }
         [Fact]
+        public async Task ShouldReturnErrorWhenNameLenghtIsGreaterThan32()
+        {
+            var fakeUserRepository = new Mock<IUserRepository>();
+            var fakeChannelRepository = new Mock<IChannelRepository>();
+            var command = new UpdateChannelNameCommand
+            {
+                Id = Guid.NewGuid(),
+                Name = "PS15TihJoUQEydtvAZFa5SeaHcDNdosgagsPHrLI",
+                AdministratorId = Guid.NewGuid()
+            };
+            var handler = new ChannelHandler(fakeChannelRepository.Object, fakeUserRepository.Object);
+
+            ICommandResult result = await handler.HandleAsync(command);
+
+            result.Success.Should().BeFalse();
+            handler.Invalid.Should().BeTrue();
+        }
+        [Fact]
         public async Task ShouldReturnErrorWhenChannelNotFound()
         {
             var fakeUserRepository = new Mock<IUserRepository>();
