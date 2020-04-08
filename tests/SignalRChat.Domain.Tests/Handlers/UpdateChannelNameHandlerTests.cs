@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using SignalRChat.Domain.Commands;
+using SignalRChat.Domain.DataOutputs;
 using SignalRChat.Domain.Entities;
 using SignalRChat.Domain.Handlers;
 using SignalRChat.Domain.Queries;
@@ -129,9 +130,12 @@ namespace SignalRChat.Domain.Tests.Handlers
             var handler = new ChannelHandler(fakeChannelRepository.Object, fakeUserRepository.Object);
 
             ICommandResult result = await handler.HandleAsync(command);
+            var resultOutput = result.Data as ChannelOutput;
 
             result.Success.Should().BeTrue();
             result.Data.Should().NotBeNull();
+            resultOutput.Should().NotBeNull();
+            resultOutput?.Name.Should().Be(command.Name);
             handler.Valid.Should().BeTrue();
             fakeChannelRepository.Verify(
                 repository => repository.UpdateChannelName(It.IsAny<Guid>(), It.IsAny<string>()),
@@ -162,9 +166,12 @@ namespace SignalRChat.Domain.Tests.Handlers
             var handler = new ChannelHandler(fakeChannelRepository.Object, fakeUserRepository.Object);
 
             ICommandResult result = await handler.HandleAsync(command);
+            var resultOutput = result.Data as ChannelOutput;
 
             result.Success.Should().BeTrue();
             result.Data.Should().NotBeNull();
+            resultOutput.Should().NotBeNull();
+            resultOutput?.Name.Should().Be(command.Name);
             handler.Valid.Should().BeTrue();
             fakeChannelRepository.Verify(
                 repository => repository.UpdateChannelName(It.IsAny<Guid>(), It.IsAny<string>()),

@@ -82,10 +82,10 @@ namespace SignalRChat.Domain.Handlers
             {
                 await _channelRepository.UpdateChannelName(channel.Id, channel.Name);
             }
-            return new CommandResult(true, "Name successfully updated", new
+            return new CommandResult(true, "Name successfully updated", new ChannelOutput
             {
-                channel.Id,
-                channel.Name
+                Id = command.Id,
+                Name = command.Name
             });
         }
 
