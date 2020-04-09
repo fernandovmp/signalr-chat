@@ -9,4 +9,10 @@ namespace SignalRChat.Domain.Queries
         public string Description { get; set; }
         public ListUsersQueryResult Administrator { get; set; }
     }
+
+    public class ListChannelsUsersJoinResult
+    {
+        public Guid AdministratorId { get; set; }
+        public string AdministratorUsername { get; set; }
+    }
 }
