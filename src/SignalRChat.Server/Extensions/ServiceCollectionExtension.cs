@@ -10,12 +10,17 @@ namespace SignalRChat.Server.Extensions
     {
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
-            return services.AddScoped<IUserRepository, UserRepository>();
+            return services.AddScoped<IUserRepository, UserRepository>()
+                .AddScoped<IChannelRepository, ChannelRepository>();
         }
 
         public static IServiceCollection AddCommandHandlers(this IServiceCollection services)
         {
-            return services.AddScoped<IHandler<CreateUserCommand>, CreateUserHandler>();
+            return services.AddScoped<IHandler<CreateUserCommand>, CreateUserHandler>()
+                .AddScoped<IHandler<CreateChannelCommand>, ChannelHandler>()
+                .AddScoped<IHandler<UpdateChannelNameCommand>, ChannelHandler>()
+                .AddScoped<IHandler<UpdateChannelDescriptionCommand>, ChannelHandler>()
+                .AddScoped<IHandler<DeleteChannelCommand>, ChannelHandler>();
         }
     }
 }
