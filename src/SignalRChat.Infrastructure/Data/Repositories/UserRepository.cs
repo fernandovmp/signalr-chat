@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
@@ -35,6 +36,12 @@ namespace SignalRChat.Infrastructure.Data.Repositories
         {
             string query = "select id, username from users where username = @Username;";
             return await _connection.QueryFirstOrDefaultAsync<GetByUsernameQueryResult>(query, new { Username = username });
+        }
+
+        public async Task<GetUserByIdQueryResult> GetById(Guid id)
+        {
+            string query = "select id, username from users where id = @Id;";
+            return await _connection.QueryFirstOrDefaultAsync<GetUserByIdQueryResult>(query, new { Id = id });
         }
     }
 }
