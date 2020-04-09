@@ -91,5 +91,33 @@ namespace SignalRChat.Domain.Tests.Commands
 
             command.Invalid.Should().BeTrue();
         }
+        [Fact]
+        public void ShouldReturnSuccessWhenDescriptionIsNull()
+        {
+            var command = new CreateChannelCommand
+            {
+                Name = "channelOne",
+                Description = null,
+                AdministratorId = Guid.NewGuid()
+            };
+
+            command.Validate();
+
+            command.Valid.Should().BeTrue();
+        }
+        [Fact]
+        public void ShouldReturnSuccessWhenDescriptionIsEmpty()
+        {
+            var command = new CreateChannelCommand
+            {
+                Name = "channelOne",
+                Description = "",
+                AdministratorId = Guid.NewGuid()
+            };
+
+            command.Validate();
+
+            command.Valid.Should().BeTrue();
+        }
     }
 }

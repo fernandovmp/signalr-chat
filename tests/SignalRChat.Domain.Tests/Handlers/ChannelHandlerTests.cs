@@ -54,6 +54,24 @@ namespace SignalRChat.Domain.Tests.Handlers
                     AdministratorId = Guid.NewGuid()
                 }
             };
+            yield return new[]
+            {
+                new CreateChannelCommand
+                {
+                    Name = "a",
+                    Description = "",
+                    AdministratorId = Guid.NewGuid()
+                }
+            };
+            yield return new[]
+            {
+                new CreateChannelCommand
+                {
+                    Name = "a",
+                    Description = null,
+                    AdministratorId = Guid.NewGuid()
+                }
+            };
         }
         public static IEnumerable<object[]> GetInvalidCommands()
         {

@@ -16,7 +16,8 @@ namespace SignalRChat.Domain.Commands
                 .Requires()
                 .IsNotNullOrWhiteSpace(Name, nameof(Name), "Channel name can't be null or white spaces")
                 .HasMaxLen(Name, 32, nameof(Name), "Channel name should be at maximum 32 characters")
-                .HasMaxLen(Description, 100, nameof(Description), "Channel description should be at maximum 100 characteres")
+                .HasMaxLengthIfNotNullOrEmpty(Description, 100,
+                    nameof(Description), "Channel description should be at maximum 100 characteres")
             );
         }
     }

@@ -13,7 +13,8 @@ namespace SignalRChat.Domain.Commands
         {
             AddNotifications(new Contract()
                 .Requires()
-                .HasMaxLen(Description, 100, nameof(Description), "Channel description should be at maximum 100 characters")
+                .HasMaxLengthIfNotNullOrEmpty(Description, 100,
+                    nameof(Description), "Channel description should be at maximum 100 characters")
             );
         }
     }

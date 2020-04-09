@@ -22,6 +22,34 @@ namespace SignalRChat.Domain.Tests.Commands
             command.Valid.Should().BeTrue();
         }
         [Fact]
+        public void ShouldReturnSuccessWhenDescriptionIsNull()
+        {
+            var command = new UpdateChannelDescriptionCommand
+            {
+                Id = Guid.NewGuid(),
+                Description = null,
+                AdministratorId = Guid.NewGuid()
+            };
+
+            command.Validate();
+
+            command.Valid.Should().BeTrue();
+        }
+        [Fact]
+        public void ShouldReturnSuccessWhenDescriptionIsEmpty()
+        {
+            var command = new UpdateChannelDescriptionCommand
+            {
+                Id = Guid.NewGuid(),
+                Description = "",
+                AdministratorId = Guid.NewGuid()
+            };
+
+            command.Validate();
+
+            command.Valid.Should().BeTrue();
+        }
+        [Fact]
         public void ShouldReturnErrorWhenDescriptionLenghtIsGreaterThan100()
         {
             var command = new UpdateChannelDescriptionCommand

@@ -84,5 +84,27 @@ namespace SignalRChat.Domain.Tests.Entities
 
             channel.Invalid.Should().BeTrue();
         }
+        [Fact]
+        public void ShouldReturnSuccessWhenDescriptionIsNull()
+        {
+            string validName = "channelOne";
+            string validDescription = null;
+            var admnistrator = new User(Guid.NewGuid(), "default");
+
+            var channel = new Channel(validName, validDescription, admnistrator);
+
+            channel.Valid.Should().BeTrue();
+        }
+        [Fact]
+        public void ShouldReturnSuccessWhenDescriptionIsEmpty()
+        {
+            string validName = "channelOne";
+            string validDescription = "";
+            var admnistrator = new User(Guid.NewGuid(), "default");
+
+            var channel = new Channel(validName, validDescription, admnistrator);
+
+            channel.Valid.Should().BeTrue();
+        }
     }
 }
