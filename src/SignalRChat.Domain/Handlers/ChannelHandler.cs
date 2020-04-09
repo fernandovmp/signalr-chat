@@ -85,7 +85,7 @@ namespace SignalRChat.Domain.Handlers
             }
             if (channel.Name != command.Name)
             {
-                await _channelRepository.UpdateChannelName(channel.Id, channel.Name);
+                await _channelRepository.UpdateChannelName(command.Id, command.Name);
             }
             return new CommandResult(true, "Name successfully updated", new ChannelOutput
             {
