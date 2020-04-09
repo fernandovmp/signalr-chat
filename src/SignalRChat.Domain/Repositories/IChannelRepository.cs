@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using SignalRChat.Domain.Entities;
 using SignalRChat.Domain.Queries;
@@ -12,5 +13,6 @@ namespace SignalRChat.Domain.Repositories
         Task UpdateChannelName(Guid id, string name);
         Task UpdateChannelDescription(Guid id, string description);
         Task DeleteChannel(Guid id);
+        Task<IEnumerable<ListChannelsQueryResult>> ListChannels();
     }
 }
