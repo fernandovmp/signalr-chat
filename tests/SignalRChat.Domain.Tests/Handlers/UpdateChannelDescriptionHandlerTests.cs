@@ -155,7 +155,8 @@ namespace SignalRChat.Domain.Tests.Handlers
             resultOutput?.Description.Should().Be(command.Description);
             handler.Valid.Should().BeTrue();
             fakeChannelRepository.Verify(
-                repository => repository.UpdateChannelDescription(It.IsAny<Guid>(), It.IsAny<string>()),
+                repository => repository.UpdateChannelDescription(It.Is<Guid>(id => id == command.Id),
+                    It.Is<string>(description => description == command.Description)),
                 Times.Once());
         }
     }

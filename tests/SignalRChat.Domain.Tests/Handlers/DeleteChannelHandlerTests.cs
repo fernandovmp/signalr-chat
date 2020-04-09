@@ -144,7 +144,7 @@ namespace SignalRChat.Domain.Tests.Handlers
             result.Success.Should().BeTrue();
             handler.Valid.Should().BeTrue();
             fakeChannelRepository.Verify(
-                repository => repository.DeleteChannel(It.IsAny<Guid>()),
+                repository => repository.DeleteChannel(It.Is<Guid>(id => id == command.ChannelId)),
                 Times.Once());
         }
     }
