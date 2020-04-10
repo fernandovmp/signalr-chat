@@ -1,0 +1,20 @@
+.channels-bar {
+    border-right: solid #eee;
+    grid-row: span 2;
+    grid-column: 0;
+}
+
+.channels-list {
+    list-style: none;
+    padding: 0;
+}
+
+.channels-list li {
+    border-bottom: solid #999;
+    border-width: 1px;
+    margin: 0;
+}
+
+.channels-list li:hover {
+    background-color: #eee;
+}
