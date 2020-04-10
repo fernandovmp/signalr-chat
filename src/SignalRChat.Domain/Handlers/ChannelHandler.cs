@@ -8,7 +8,7 @@ using SignalRChat.Domain.Repositories;
 
 namespace SignalRChat.Domain.Handlers
 {
-    public class ChannelHandler : Notifiable,
+    public class ChannelHandler : HandlerBase,
         IHandler<CreateChannelCommand>,
         IHandler<UpdateChannelNameCommand>,
         IHandler<UpdateChannelDescriptionCommand>,
@@ -29,14 +29,14 @@ namespace SignalRChat.Domain.Handlers
             if (command.Invalid)
             {
                 AddNotifications(command);
-                return new CommandResult(false, "Could not create channel", null);
+                return new CommandResult(false, "Could not create channel", Errors);
             }
 
             GetUserByIdQueryResult user = await _userRepository.GetById(command.AdministratorId);
             if (user is null)
             {
                 AddNotification(nameof(command.AdministratorId), "User not found");
-                return new CommandResult(false, "Could not create channel", null);
+                return new CommandResult(false, "Could not create channel", Errors);
             }
 
             var administrator = new User(user.Id, user.Username);
@@ -45,7 +45,7 @@ namespace SignalRChat.Domain.Handlers
 
             if (Invalid)
             {
-                return new CommandResult(false, "Could not create channel", null);
+                return new CommandResult(false, "Could not create channel", Errors);
             }
 
             await _channelRepository.CreateChannel(channel);
@@ -69,19 +69,19 @@ namespace SignalRChat.Domain.Handlers
             if (command.Invalid)
             {
                 AddNotifications(command);
-                return new CommandResult(false, "Could not update channel name", null);
+                return new CommandResult(false, "Could not update channel name", Errors);
             }
 
             GetChannelByIdQueryResult channel = await _channelRepository.GetById(command.Id);
             if (channel is null)
             {
                 AddNotification(nameof(command.Id), "Channel not found");
-                return new CommandResult(false, "Could not update channel name", null);
+                return new CommandResult(false, "Could not update channel name", Errors);
             }
             if (command.AdministratorId != channel.AdministratorId)
             {
                 AddNotification(nameof(command.AdministratorId), "AdministratorId does't match channel administrator id");
-                return new CommandResult(false, "User does't have permission to update channel name", null);
+                return new CommandResult(false, "User does't have permission to update channel name", Errors);
             }
             if (channel.Name != command.Name)
             {
@@ -100,18 +100,18 @@ namespace SignalRChat.Domain.Handlers
             if (command.Invalid)
             {
                 AddNotifications(command);
-                return new CommandResult(false, "Could not update channel description", null);
+                return new CommandResult(false, "Could not update channel description", Errors);
             }
             GetChannelByIdQueryResult channel = await _channelRepository.GetById(command.Id);
             if (channel is null)
             {
                 AddNotification(nameof(command.Id), "Channel not found");
-                return new CommandResult(false, "Could not update channel description", null);
+                return new CommandResult(false, "Could not update channel description", Errors);
             }
             if (command.AdministratorId != channel.AdministratorId)
             {
                 AddNotification(nameof(command.AdministratorId), "AdministratorId does't match channel administrator id");
-                return new CommandResult(false, "User does't have permission to update channel description", null);
+                return new CommandResult(false, "User does't have permission to update channel description", Errors);
             }
             if (channel.Description != command.Description)
             {
@@ -130,21 +130,21 @@ namespace SignalRChat.Domain.Handlers
             if (command.Invalid)
             {
                 AddNotifications(command);
-                return new CommandResult(false, "Could not delete this channel", null);
+                return new CommandResult(false, "Could not delete this channel", Errors);
             }
             GetChannelByIdQueryResult channel = await _channelRepository.GetById(command.ChannelId);
             if (channel is null)
             {
                 AddNotification(nameof(command.ChannelId), "Channel not found");
-                return new CommandResult(false, "Could not delete this channel", null);
+                return new CommandResult(false, "Could not delete this channel", Errors);
             }
             if (channel.AdministratorId != command.AdministratorId)
             {
                 AddNotification(nameof(command.AdministratorId), "AdministratorId does't match channel administrator id");
-                return new CommandResult(false, "User does't have permission to delete this channel", null);
+                return new CommandResult(false, "User does't have permission to delete this channel", Errors);
             }
             await _channelRepository.DeleteChannel(channel.Id);
-            return new CommandResult(true, "Channel successfully deleted", null);
+            return new CommandResult(true, "Channel successfully deleted", null, null);
         }
     }
 }

@@ -6,7 +6,7 @@ using SignalRChat.Domain.Repositories;
 
 namespace SignalRChat.Domain.Handlers
 {
-    public class CreateUserHandler : Notifiable, IHandler<CreateUserCommand>
+    public class CreateUserHandler : HandlerBase, IHandler<CreateUserCommand>
     {
         private readonly IUserRepository _repository;
         public CreateUserHandler(IUserRepository repository)
@@ -20,7 +20,7 @@ namespace SignalRChat.Domain.Handlers
             if (command.Invalid)
             {
                 AddNotifications(command);
-                return new CommandResult(false, "Could not create user", null);
+                return new CommandResult(false, "Could not create user", Errors);
             }
 
             if (await _repository.Exists(command.Username))
@@ -32,7 +32,7 @@ namespace SignalRChat.Domain.Handlers
             AddNotifications(user);
             if (Invalid)
             {
-                return new CommandResult(false, "Could not create user", null);
+                return new CommandResult(false, "Could not create user", Errors);
             }
 
             await _repository.CreateUser(user);

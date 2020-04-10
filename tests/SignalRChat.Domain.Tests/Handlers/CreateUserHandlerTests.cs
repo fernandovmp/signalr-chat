@@ -85,6 +85,7 @@ namespace SignalRChat.Domain.Tests.Handlers
 
             ICommandResult result = await handler.HandleAsync(command);
             result.Success.Should().BeFalse();
+            result.Errors.Should().HaveCountGreaterThan(0);
             handler.Invalid.Should().BeTrue();
         }
 
@@ -100,7 +101,9 @@ namespace SignalRChat.Domain.Tests.Handlers
             var handler = new CreateUserHandler(fakeRepository.Object);
 
             ICommandResult result = await handler.HandleAsync(command);
+
             result.Success.Should().BeFalse();
+            result.Errors.Should().HaveCountGreaterThan(0);
             handler.Invalid.Should().BeTrue();
         }
 
@@ -119,6 +122,7 @@ namespace SignalRChat.Domain.Tests.Handlers
 
             result.Data.Should().NotBeNull();
             result.Success.Should().BeTrue();
+            result.Errors.Should().BeNullOrEmpty();
             handler.Valid.Should().BeTrue();
         }
     }

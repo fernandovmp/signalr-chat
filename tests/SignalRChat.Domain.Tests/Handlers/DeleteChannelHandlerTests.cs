@@ -28,6 +28,7 @@ namespace SignalRChat.Domain.Tests.Handlers
             ICommandResult result = await handler.HandleAsync(command);
 
             result.Success.Should().BeFalse();
+            result.Errors.Should().HaveCountGreaterThan(0);
             handler.Invalid.Should().BeTrue();
         }
         [Fact]
@@ -46,6 +47,7 @@ namespace SignalRChat.Domain.Tests.Handlers
             ICommandResult result = await handler.HandleAsync(command);
 
             result.Success.Should().BeFalse();
+            result.Errors.Should().HaveCountGreaterThan(0);
             handler.Invalid.Should().BeTrue();
         }
         [Fact]
@@ -64,6 +66,7 @@ namespace SignalRChat.Domain.Tests.Handlers
             ICommandResult result = await handler.HandleAsync(command);
 
             result.Success.Should().BeFalse();
+            result.Errors.Should().HaveCountGreaterThan(0);
             handler.Invalid.Should().BeTrue();
         }
         [Fact]
@@ -85,6 +88,7 @@ namespace SignalRChat.Domain.Tests.Handlers
             ICommandResult result = await handler.HandleAsync(command);
 
             result.Success.Should().BeFalse();
+            result.Errors.Should().HaveCountGreaterThan(0);
             handler.Invalid.Should().BeTrue();
         }
         [Fact]
@@ -114,6 +118,7 @@ namespace SignalRChat.Domain.Tests.Handlers
             ICommandResult result = await handler.HandleAsync(command);
 
             result.Success.Should().BeFalse();
+            result.Errors.Should().HaveCountGreaterThan(0);
             handler.Invalid.Should().BeTrue();
         }
         [Fact]
@@ -142,6 +147,7 @@ namespace SignalRChat.Domain.Tests.Handlers
             ICommandResult result = await handler.HandleAsync(command);
 
             result.Success.Should().BeTrue();
+            result.Errors.Should().BeNullOrEmpty();
             handler.Valid.Should().BeTrue();
             fakeChannelRepository.Verify(
                 repository => repository.DeleteChannel(It.Is<Guid>(id => id == command.ChannelId)),

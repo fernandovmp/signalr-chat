@@ -134,6 +134,7 @@ namespace SignalRChat.Domain.Tests.Handlers
             ICommandResult result = await handler.HandleAsync(command);
 
             result.Success.Should().BeFalse();
+            result.Errors.Should().HaveCountGreaterThan(0);
             handler.Invalid.Should().BeTrue();
         }
 
@@ -171,6 +172,7 @@ namespace SignalRChat.Domain.Tests.Handlers
 
             result.Success.Should().BeTrue();
             result.Data.Should().NotBeNull();
+            result.Errors.Should().BeNullOrEmpty();
             resultOutput.Should().NotBeNull();
             resultOutput?.Id.Should().NotBeEmpty();
             resultOutput?.Administrator.Should().NotBeNull();
@@ -194,6 +196,7 @@ namespace SignalRChat.Domain.Tests.Handlers
 
             handler.Invalid.Should().BeTrue();
             result.Success.Should().BeFalse();
+            result.Errors.Should().HaveCountGreaterThan(0);
         }
 
         [Theory]
@@ -220,6 +223,7 @@ namespace SignalRChat.Domain.Tests.Handlers
             handler.Valid.Should().BeTrue();
             result.Success.Should().BeTrue();
             result.Data.Should().NotBeNull();
+            result.Errors.Should().BeNullOrEmpty();
             resultOutput.Should().NotBeNull();
             resultOutput?.Id.Should().NotBeEmpty();
             resultOutput?.Administrator.Should().NotBeNull();

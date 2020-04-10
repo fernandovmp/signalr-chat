@@ -32,6 +32,7 @@ namespace SignalRChat.Domain.Tests.Handlers
             ICommandResult result = await handler.HandleAsync(command);
 
             result.Success.Should().BeFalse();
+            result.Errors.Should().HaveCountGreaterThan(0);
             handler.Invalid.Should().BeTrue();
         }
 
@@ -51,6 +52,7 @@ namespace SignalRChat.Domain.Tests.Handlers
             ICommandResult result = await handler.HandleAsync(command);
 
             result.Success.Should().BeFalse();
+            result.Errors.Should().HaveCountGreaterThan(0);
             handler.Invalid.Should().BeTrue();
         }
         [Fact]
@@ -69,6 +71,7 @@ namespace SignalRChat.Domain.Tests.Handlers
             ICommandResult result = await handler.HandleAsync(command);
 
             result.Success.Should().BeFalse();
+            result.Errors.Should().HaveCountGreaterThan(0);
             handler.Invalid.Should().BeTrue();
         }
         [Fact]
@@ -90,6 +93,7 @@ namespace SignalRChat.Domain.Tests.Handlers
             ICommandResult result = await handler.HandleAsync(command);
 
             result.Success.Should().BeFalse();
+            result.Errors.Should().HaveCountGreaterThan(0);
             handler.Invalid.Should().BeTrue();
         }
         [Fact]
@@ -120,6 +124,7 @@ namespace SignalRChat.Domain.Tests.Handlers
             ICommandResult result = await handler.HandleAsync(command);
 
             result.Success.Should().BeFalse();
+            result.Errors.Should().HaveCountGreaterThan(0);
             handler.Invalid.Should().BeTrue();
         }
 
@@ -152,6 +157,7 @@ namespace SignalRChat.Domain.Tests.Handlers
 
             result.Success.Should().BeTrue();
             result.Data.Should().NotBeNull();
+            result.Errors.Should().BeNullOrEmpty();
             resultOutput.Should().NotBeNull();
             resultOutput?.Name.Should().Be(command.Name);
             handler.Valid.Should().BeTrue();
@@ -188,6 +194,7 @@ namespace SignalRChat.Domain.Tests.Handlers
 
             result.Success.Should().BeTrue();
             result.Data.Should().NotBeNull();
+            result.Errors.Should().BeNullOrEmpty();
             resultOutput.Should().NotBeNull();
             resultOutput?.Name.Should().Be(command.Name);
             handler.Valid.Should().BeTrue();
