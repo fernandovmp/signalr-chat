@@ -1,9 +1,11 @@
 import User from '../models/User';
 import ErrorModel from '../models/ErrorModel';
+import Channel from '../models/Channel';
 
 export interface IChatApiService {
     createUser(username: string): Promise<User>;
     authenticate(username: string): Promise<User>;
+    getChannelsAsync(): Promise<Channel[]>;
 }
 
 export class ChatApiService implements IChatApiService {
@@ -40,6 +42,10 @@ export class ChatApiService implements IChatApiService {
             const error = await this.getErrors(response);
             throw new Error(error.message);
         }
+        return response.json();
+    }
+    async getChannelsAsync(): Promise<Channel[]> {
+        const response = await fetch(`${this.baseUrl}/channels`);
         return response.json();
     }
 }
