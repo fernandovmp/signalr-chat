@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using SignalRChat.Domain.DataOutputs;
+
 namespace SignalRChat.Domain.Commands
 {
     public interface ICommandResult
@@ -5,5 +8,6 @@ namespace SignalRChat.Domain.Commands
         bool Success { get; }
         string Message { get; }
         object Data { get; }
+        IEnumerable<ErrorOutput> Errors { get; }
     }
 }
