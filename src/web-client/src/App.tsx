@@ -15,7 +15,10 @@ function App() {
                 <LoginPage chatApiService={chatApiService} />
             </Route>
             <Route path="/chat" exact={true}>
-                <ChatPage chatService={chatService} />
+                <ChatPage
+                    chatService={chatService}
+                    chatApiService={chatApiService}
+                />
             </Route>
         </BrowserRouter>
     );

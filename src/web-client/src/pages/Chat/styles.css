@@ -1,6 +1,9 @@
 .chat-container {
     margin: 50px 10%;
     box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.75);
+    display: grid;
+    grid-template-columns: 25% 75%;
+    grid-template-rows: 85% 15%;
 }
 
 .chat-messages {
@@ -9,12 +12,16 @@
     flex-direction: column;
     height: 350px;
     padding: 10px 20px;
+    grid-column: 1 1;
+    grid-row: 0 0;
 }
 
 .chat-input-area {
     display: flex;
     padding: 15px;
     background: #eee;
+    grid-column: 1 1;
+    grid-row: 1 1;
 }
 
 .chat-input-area textarea {
