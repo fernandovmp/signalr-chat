@@ -41,17 +41,9 @@ namespace SignalRChat.Server.Controllers
                 var handler = createUserHandler as CreateUserHandler;
                 if (handler.Notifications.Any(notification => notification.Message == "User already exists"))
                 {
-                    return Conflict(new ErrorViewModel
-                    {
-                        Message = "User already exists",
-                        Errors = handler.Notifications.Select(notification => (object)notification).ToList()
-                    });
+                    return Conflict(new ErrorViewModel(result));
                 }
-                return UnprocessableEntity(new ErrorViewModel
-                {
-                    Message = "Could not process this user",
-                    Errors = handler.Notifications.Select(notification => (object)notification).ToList()
-                });
+                return UnprocessableEntity(new ErrorViewModel(result));
             }
             return Ok(result.Data);
         }
@@ -62,7 +54,7 @@ namespace SignalRChat.Server.Controllers
             GetByUsernameQueryResult user = await _userRepository.GetByUsername(data.Username);
             if (user is null)
             {
-                return BadRequest(new { Error = "User not found", data.Username });
+                return BadRequest(new ErrorViewModel("User not found", null));
             }
             return Ok(user);
         }

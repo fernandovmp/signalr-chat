@@ -41,12 +41,7 @@ namespace SignalRChat.Server.Controllers
             ICommandResult result = await handler.HandleAsync(command);
             if (!result.Success)
             {
-                var channelHandler = handler as ChannelHandler;
-                return BadRequest(new ErrorViewModel
-                {
-                    Message = result.Message,
-                    Errors = channelHandler.Notifications.Select(notification => (object)notification).ToList()
-                });
+                return BadRequest(new ErrorViewModel(result));
             }
             return Ok(result.Data);
         }
@@ -66,12 +61,7 @@ namespace SignalRChat.Server.Controllers
             ICommandResult result = await handler.HandleAsync(command);
             if (!result.Success)
             {
-                var channelHandler = handler as ChannelHandler;
-                return BadRequest(new ErrorViewModel
-                {
-                    Message = result.Message,
-                    Errors = channelHandler.Notifications.Select(notification => (object)notification).ToList()
-                });
+                return BadRequest(new ErrorViewModel(result));
             }
             return NoContent();
         }
@@ -91,12 +81,7 @@ namespace SignalRChat.Server.Controllers
             ICommandResult result = await handler.HandleAsync(command);
             if (!result.Success)
             {
-                var channelHandler = handler as ChannelHandler;
-                return BadRequest(new ErrorViewModel
-                {
-                    Message = result.Message,
-                    Errors = channelHandler.Notifications.Select(notification => (object)notification).ToList()
-                });
+                return BadRequest(new ErrorViewModel(result));
             }
             return NoContent();
         }
@@ -117,22 +102,14 @@ namespace SignalRChat.Server.Controllers
                 var channelHandler = handler as ChannelHandler;
                 if (channelHandler.Notifications.Any(notification => notification.Message == "Channel not found"))
                 {
-                    return NotFound(new ErrorViewModel
-                    {
-                        Message = result.Message,
-                        Errors = channelHandler.Notifications.Select(notification => (object)notification).ToList()
-                    });
+                    return NotFound(new ErrorViewModel(result));
                 }
                 if (channelHandler.Notifications
                     .Any(notification => notification.Message == "AdministratorId does't match channel administrator id"))
                 {
                     return Unauthorized();
                 }
-                return BadRequest(new ErrorViewModel
-                {
-                    Message = result.Message,
-                    Errors = channelHandler.Notifications.Select(notification => (object)notification).ToList()
-                });
+                return BadRequest(new ErrorViewModel(result));
             }
             return NoContent();
         }
