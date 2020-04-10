@@ -15,7 +15,7 @@ type propsType = {
 const ChatPage: React.FC<propsType> = ({ chatService }) => {
     const [user] = useLocalStorage<User>('user', {
         id: '',
-        username: ''
+        username: '',
     });
     const [messages, setMessages] = useState<Message[]>([]);
     const [joinedNotifications, setjoinedNotifications] = useState<string[]>(
@@ -28,37 +28,44 @@ const ChatPage: React.FC<propsType> = ({ chatService }) => {
         const setupChatAsync = async () => {
             await chatService.connection.start();
             await chatService.joinChatAsync(user.username);
-            chatService.onUserJoined(user => {
-                setjoinedNotifications(previousState =>
+            chatService.onUserJoined((user) => {
+                setjoinedNotifications((previousState) =>
                     previousState.concat(user)
                 );
                 setTimeout(
                     () =>
-                        setjoinedNotifications(previousState =>
+                        setjoinedNotifications((previousState) =>
                             previousState.filter(
-                                notification => notification !== user
+                                (notification) => notification !== user
                             )
                         ),
                     6000
                 );
             });
-            chatService.onReceiveMessage(message => {
-                setMessages(previousState => [...previousState, message]);
+            chatService.onReceiveMessage((message) => {
+                setMessages((previousState) => [...previousState, message]);
             });
         };
         console.log(user);
         if (user.username.trim() === '') {
             history.push('/');
             return;
+        } else {
+            setupChatAsync();
         }
-        setupChatAsync();
+        const cleanup = async () => {
+            await chatService.disconect();
+        };
+        return () => {
+            cleanup();
+        };
     }, [chatService]);
 
     const handleSend = async () => {
         const message: Message = {
             sender: user.username,
             content: messageInputValue,
-            date: new Date()
+            date: new Date(),
         };
         await chatService.sendMessageAsync(message);
         setMessageInputValue('');
@@ -67,7 +74,7 @@ const ChatPage: React.FC<propsType> = ({ chatService }) => {
     return (
         <div className="chat-container">
             <div className="chat-messages">
-                {messages.map(_message => (
+                {messages.map((_message) => (
                     <MessageBalloon
                         key={`${_message.date}-${_message.sender}`}
                         message={_message}
@@ -78,7 +85,7 @@ const ChatPage: React.FC<propsType> = ({ chatService }) => {
                 <textarea
                     placeholder="Digite sua menssagem..."
                     value={messageInputValue}
-                    onChange={e => setMessageInputValue(e.target.value)}
+                    onChange={(e) => setMessageInputValue(e.target.value)}
                     maxLength={255}
                 ></textarea>
                 <button onClick={() => handleSend()}>
@@ -94,7 +101,7 @@ const ChatPage: React.FC<propsType> = ({ chatService }) => {
                 </button>
             </div>
             <div className="chat-notification-container">
-                {joinedNotifications.map(joinedUser => (
+                {joinedNotifications.map((joinedUser) => (
                     <JoinNotification username={joinedUser} />
                 ))}
             </div>

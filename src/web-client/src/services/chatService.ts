@@ -7,6 +7,7 @@ export interface IChatService {
     onUserJoined(action: (username: string) => void): void;
     onReceiveMessage(action: (message: Message) => void): void;
     sendMessageAsync(message: Message): Promise<void>;
+    disconect(): Promise<void>;
 }
 
 export class ChatService implements IChatService {
@@ -16,6 +17,11 @@ export class ChatService implements IChatService {
         this.connection = new signalR.HubConnectionBuilder()
             .withUrl(url)
             .build();
+    }
+    async disconect(): Promise<void> {
+        this.connection.off('userJoined');
+        this.connection.off('receiveMessage');
+        await this.connection.stop();
     }
 
     async joinChatAsync(username: string): Promise<void> {
