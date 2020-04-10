@@ -1,0 +1,7 @@
+.channel-container {
+    margin: 0 10px;
+    font-size: medium;
+    display: flex;
+    align-items: center;
+    height: 50px;
+}
