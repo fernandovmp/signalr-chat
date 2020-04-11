@@ -7,9 +7,13 @@ type propsType = {
     onClick?: (channel: Channel) => void;
 };
 
-const ChannelItem: React.FC<propsType> = ({ channel }) => {
+const ChannelItem: React.FC<propsType> = ({ channel, onClick }) => {
+    const handleOnClick = () => {
+        if (!onClick) return;
+        onClick(channel);
+    };
     return (
-        <div className="channel-container">
+        <div className="channel-container" onClick={handleOnClick}>
             <strong>{channel.name}</strong>
         </div>
     );
