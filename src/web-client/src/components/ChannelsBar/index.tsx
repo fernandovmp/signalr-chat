@@ -1,14 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './styles.css';
 import Channel from '../../models/Channel';
 import ChannelItem from '../ChannelItem';
 
-type propsType = {
-    channels: Channel[];
-    onChannelSelect?: (channel: Channel) => void;
+export type onChannelSelectArgument = {
+    previousSelectedChannel?: Channel;
+    selectedChannel: Channel;
 };
 
-const ChannelsBar: React.FC<propsType> = ({ channels, onChannelSelect }) => {
+type propsType = {
+    channels: Channel[];
+    onChannelSelect?: (arg: onChannelSelectArgument) => void;
+};
+
+export const ChannelsBar: React.FC<propsType> = ({
+    channels,
+    onChannelSelect,
+}) => {
+    const [selectedChannel, setSelectedChannel] = useState<Channel | undefined>(
+        undefined
+    );
+
+    const handleOnSelected = (channel: Channel) => {
+        if (onChannelSelect !== undefined) {
+            onChannelSelect({
+                previousSelectedChannel: selectedChannel,
+                selectedChannel: channel,
+            });
+        }
+        setSelectedChannel(channel);
+    };
+
     return (
         <div className="channels-bar">
             <ul className="channels-list">
@@ -16,7 +38,7 @@ const ChannelsBar: React.FC<propsType> = ({ channels, onChannelSelect }) => {
                     <li key={channel.id}>
                         <ChannelItem
                             channel={channel}
-                            onClick={onChannelSelect}
+                            onClick={handleOnSelected}
                         />
                     </li>
                 ))}
@@ -25,4 +47,4 @@ const ChannelsBar: React.FC<propsType> = ({ channels, onChannelSelect }) => {
     );
 };
 
-export default ChannelsBar;
+//export default ChannelsBar;
