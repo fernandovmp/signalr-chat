@@ -7,7 +7,10 @@ import { IChatService } from '../../services/chatService';
 import JoinNotification from '../../components/JoinNotification';
 import { useHistory } from 'react-router-dom';
 import User from '../../models/User';
-import ChannelsBar from '../../components/ChannelsBar';
+import {
+    ChannelsBar,
+    onChannelSelectArgument,
+} from '../../components/ChannelsBar';
 import Channel from '../../models/Channel';
 import { IChatApiService } from '../../services/chatApiService';
 
@@ -32,21 +35,23 @@ const ChatPage: React.FC<propsType> = ({ chatService, chatApiService }) => {
     useEffect(() => {
         const setupChatAsync = async () => {
             await chatService.connection.start();
-            await chatService.joinChatAsync(user.username);
-            chatService.onUserJoined((user) => {
+            const notificationAction = (notificationMessage: string) => {
                 setjoinedNotifications((previousState) =>
-                    previousState.concat(user)
+                    previousState.concat(notificationMessage)
                 );
                 setTimeout(
                     () =>
                         setjoinedNotifications((previousState) =>
                             previousState.filter(
-                                (notification) => notification !== user
+                                (notification) =>
+                                    notification !== notificationMessage
                             )
                         ),
                     6000
                 );
-            });
+            };
+            chatService.onUserJoined(notificationAction);
+            chatService.onUserLeft(notificationAction);
             chatService.onReceiveMessage((message) => {
                 setMessages((previousState) => [...previousState, message]);
             });
@@ -84,10 +89,24 @@ const ChatPage: React.FC<propsType> = ({ chatService, chatApiService }) => {
         setMessageInputValue('');
     };
 
+    const handleJoinChannel = async (arg: onChannelSelectArgument) => {
+        const { previousSelectedChannel, selectedChannel } = arg;
+        if (previousSelectedChannel !== undefined) {
+            await chatService.leaveChannelAsync(
+                previousSelectedChannel.id,
+                user.username
+            );
+        }
+        await chatService.joinChannelAsync(selectedChannel.id, user.username);
+    };
+
     return (
         <>
             <div className="chat-container">
-                <ChannelsBar channels={channels} />
+                <ChannelsBar
+                    channels={channels}
+                    onChannelSelect={handleJoinChannel}
+                />
                 <div className="chat-messages">
                     {messages.map((_message) => (
                         <MessageBalloon
