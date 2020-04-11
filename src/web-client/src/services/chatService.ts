@@ -3,8 +3,10 @@ import Message from '../models/Message';
 
 export interface IChatService {
     readonly connection: signalR.HubConnection;
-    joinChatAsync(username: string): Promise<void>;
-    onUserJoined(action: (username: string) => void): void;
+    joinChannelAsync(channelId: string, username: string): Promise<void>;
+    leaveChannelAsync(channelId: string, username: string): Promise<void>;
+    onUserJoined(action: (notification: string) => void): void;
+    onUserLeft(action: (notification: string) => void): void;
     onReceiveMessage(action: (message: Message) => void): void;
     sendMessageAsync(message: Message): Promise<void>;
     disconect(): Promise<void>;
@@ -24,12 +26,27 @@ export class ChatService implements IChatService {
         await this.connection.stop();
     }
 
-    async joinChatAsync(username: string): Promise<void> {
-        await this.connection.send('joinChat', username);
+    async joinChannelAsync(channelId: string, username: string): Promise<void> {
+        await this.connection.send('joinChat', channelId, username);
     }
 
-    onUserJoined(action: (username: string) => void): void {
-        this.connection.on('userJoined', action);
+    async leaveChannelAsync(
+        channelId: string,
+        username: string
+    ): Promise<void> {
+        await this.connection.send('leaveChat', channelId, username);
+    }
+
+    onUserJoined(action: (notification: string) => void): void {
+        this.connection.on('userJoined', (username) =>
+            action(`${username} joined the chat`)
+        );
+    }
+
+    onUserLeft(action: (notification: string) => void): void {
+        this.connection.on('userLeave', (username) =>
+            action(`${username} left the chat`)
+        );
     }
 
     onReceiveMessage(action: (message: Message) => void): void {
