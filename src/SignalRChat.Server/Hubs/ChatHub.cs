@@ -14,6 +14,12 @@ namespace SignalRChat.Server.Hubs
             await Clients.OthersInGroup(channel).SendAsync("UserJoined", username);
         }
 
+        public async Task LeaveChat(Guid channelId, string username)
+        {
+            string channel = channelId.ToString();
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, channel);
+            await Clients.Group(channel).SendAsync("UserLeave", username);
+        }
         public async Task SendMessage(Message message)
         {
             await Clients.All.SendAsync("ReceiveMessage", message);
