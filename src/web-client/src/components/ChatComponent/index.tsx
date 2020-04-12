@@ -2,10 +2,10 @@ import React from 'react';
 import ChatInputArea from './ChatInputArea';
 import { IChatService } from '../../services/chatService';
 import Message from '../../models/Message';
-import MessageBalloon from '../MessageBalloon';
-import './styles.css';
+import MessageBalloon from './MessageBalloon';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import User from '../../models/User';
+import './styles.css';
 
 type propsType = {
     chatService: IChatService;
