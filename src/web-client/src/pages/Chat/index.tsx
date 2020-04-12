@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import {
     ChannelsBar,
@@ -6,12 +7,11 @@ import {
     ChatComponent,
     JoinNotification,
 } from '../../components';
-import './styles.css';
-import Message from '../../models/Message';
 import { IChatApiService, IChatService } from '../../services';
-import { useHistory } from 'react-router-dom';
+import Message from '../../models/Message';
 import User from '../../models/User';
 import Channel from '../../models/Channel';
+import './styles.css';
 
 type propsType = {
     chatService: IChatService;
@@ -28,6 +28,9 @@ const ChatPage: React.FC<propsType> = ({ chatService, chatApiService }) => {
         []
     );
     const [channels, setChannels] = useState<Channel[]>([]);
+    const [currentChannel, setCurrentChannel] = useState<Channel | undefined>(
+        undefined
+    );
     const history = useHistory();
 
     useEffect(() => {
@@ -86,6 +89,7 @@ const ChatPage: React.FC<propsType> = ({ chatService, chatApiService }) => {
             );
         }
         await chatService.joinChannelAsync(selectedChannel.id, user.username);
+        setCurrentChannel(selectedChannel);
     };
 
     return (
@@ -95,7 +99,14 @@ const ChatPage: React.FC<propsType> = ({ chatService, chatApiService }) => {
                     channels={channels}
                     onChannelSelect={handleJoinChannel}
                 />
-                <ChatComponent chatService={chatService} messages={messages} />
+                {currentChannel !== undefined && (
+                    <ChatComponent
+                        chatService={chatService}
+                        messages={messages}
+                        currentChannel={currentChannel}
+                    />
+                )}
+
                 <div className="chat-notification-container">
                     {joinedNotifications.map((joinedUser) => (
                         <JoinNotification username={joinedUser} />
