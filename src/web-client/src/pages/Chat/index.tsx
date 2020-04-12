@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import './styles.css';
 import Message from '../../models/Message';
-import { IChatService } from '../../services/chatService';
+import { IChatApiService, IChatService } from '../../services';
 import JoinNotification from '../../components/JoinNotification';
 import { useHistory } from 'react-router-dom';
 import User from '../../models/User';
@@ -11,7 +11,6 @@ import {
     onChannelSelectArgument,
 } from '../../components/ChannelsBar';
 import Channel from '../../models/Channel';
-import { IChatApiService } from '../../services/chatApiService';
 import ChatComponent from '../../components/ChatComponent';
 
 type propsType = {

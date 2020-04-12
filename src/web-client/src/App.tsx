@@ -2,8 +2,7 @@ import React from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 import LoginPage from './pages/Login';
 import ChatPage from './pages/Chat';
-import { ChatService } from './services/chatService';
-import { ChatApiService } from './services/chatApiService';
+import { ChatApiService, ChatService } from './services';
 
 const chatService = new ChatService('https://localhost:5001/chatHub');
 const chatApiService = new ChatApiService('https://localhost:5001/api');

@@ -1,6 +1,6 @@
 import React from 'react';
 import ChatInputArea from './ChatInputArea';
-import { IChatService } from '../../services/chatService';
+import { IChatService } from '../../services';
 import Message from '../../models/Message';
 import MessageBalloon from './MessageBalloon';
 import useLocalStorage from '../../hooks/useLocalStorage';

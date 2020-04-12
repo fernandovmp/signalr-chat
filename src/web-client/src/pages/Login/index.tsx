@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import './styles.css';
-import { IChatApiService } from '../../services/chatApiService';
+import { IChatApiService } from '../../services';
 import User from '../../models/User';
 
 type propsType = {
@@ -12,7 +12,7 @@ type propsType = {
 const LoginPage: React.FC<propsType> = ({ chatApiService }) => {
     const [user, setUser] = useLocalStorage<User>('user', {
         id: '',
-        username: ''
+        username: '',
     });
     const [usernameInputValue, setUsernameInputValue] = useState<string>(
         user.username
@@ -48,7 +48,7 @@ const LoginPage: React.FC<propsType> = ({ chatApiService }) => {
                 Username
                 <input
                     value={usernameInputValue}
-                    onChange={e => setUsernameInputValue(e.target.value)}
+                    onChange={(e) => setUsernameInputValue(e.target.value)}
                 />
             </label>
             <button type="submit">ENTRAR</button>
