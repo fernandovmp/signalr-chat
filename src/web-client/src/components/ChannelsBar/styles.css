@@ -18,3 +18,7 @@
 .channels-list li:hover {
     background-color: #eee;
 }
+
+.channel-selected {
+    background-color: #ddd;
+}

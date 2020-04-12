@@ -35,7 +35,14 @@ export const ChannelsBar: React.FC<propsType> = ({
         <div className="channels-bar">
             <ul className="channels-list">
                 {channels.map((channel) => (
-                    <li key={channel.id}>
+                    <li
+                        key={channel.id}
+                        className={
+                            channel.id === selectedChannel?.id
+                                ? 'channel-selected'
+                                : ''
+                        }
+                    >
                         <ChannelItem
                             channel={channel}
                             onClick={handleOnSelected}
