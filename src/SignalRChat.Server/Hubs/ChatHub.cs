@@ -22,7 +22,7 @@ namespace SignalRChat.Server.Hubs
         }
         public async Task SendMessage(Message message)
         {
-            await Clients.All.SendAsync("ReceiveMessage", message);
+            await Clients.Group(message.ChannelId.ToString()).SendAsync("ReceiveMessage", message);
         }
     }
 }
