@@ -29,7 +29,6 @@ const ChatComponent: React.FC<propsType> = ({ chatService, messages }) => {
 
     return (
         <>
-            <ChatInputArea handleSend={handleSend} />
             <div className="chat-messages">
                 {messages.map((message) => (
                     <MessageBalloon
@@ -38,6 +37,7 @@ const ChatComponent: React.FC<propsType> = ({ chatService, messages }) => {
                     />
                 ))}
             </div>
+            <ChatInputArea handleSend={handleSend} />
         </>
     );
 };
