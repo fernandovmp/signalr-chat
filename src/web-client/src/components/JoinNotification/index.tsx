@@ -5,7 +5,7 @@ type propsType = {
     username: string;
 };
 
-const JoinNotification: React.FC<propsType> = ({ username }) => {
+export const JoinNotification: React.FC<propsType> = ({ username }) => {
     return (
         <div className="join-notification">
             <p>
@@ -14,5 +14,3 @@ const JoinNotification: React.FC<propsType> = ({ username }) => {
         </div>
     );
 };
-
-export default JoinNotification;

@@ -7,7 +7,7 @@ type propsType = {
     onClick?: (channel: Channel) => void;
 };
 
-const ChannelItem: React.FC<propsType> = ({ channel, onClick }) => {
+export const ChannelItem: React.FC<propsType> = ({ channel, onClick }) => {
     const handleOnClick = () => {
         if (!onClick) return;
         onClick(channel);
@@ -18,5 +18,3 @@ const ChannelItem: React.FC<propsType> = ({ channel, onClick }) => {
         </div>
     );
 };
-
-export default ChannelItem;

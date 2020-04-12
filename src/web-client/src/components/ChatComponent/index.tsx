@@ -12,7 +12,10 @@ type propsType = {
     messages: Message[];
 };
 
-const ChatComponent: React.FC<propsType> = ({ chatService, messages }) => {
+export const ChatComponent: React.FC<propsType> = ({
+    chatService,
+    messages,
+}) => {
     const [user] = useLocalStorage<User>('user', {
         id: '',
         username: '',
@@ -41,5 +44,3 @@ const ChatComponent: React.FC<propsType> = ({ chatService, messages }) => {
         </>
     );
 };
-
-export default ChatComponent;

@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import useLocalStorage from '../../hooks/useLocalStorage';
-import './styles.css';
-import Message from '../../models/Message';
-import { IChatApiService, IChatService } from '../../services';
-import JoinNotification from '../../components/JoinNotification';
-import { useHistory } from 'react-router-dom';
-import User from '../../models/User';
 import {
     ChannelsBar,
     onChannelSelectArgument,
-} from '../../components/ChannelsBar';
+    ChatComponent,
+    JoinNotification,
+} from '../../components';
+import './styles.css';
+import Message from '../../models/Message';
+import { IChatApiService, IChatService } from '../../services';
+import { useHistory } from 'react-router-dom';
+import User from '../../models/User';
 import Channel from '../../models/Channel';
-import ChatComponent from '../../components/ChatComponent';
 
 type propsType = {
     chatService: IChatService;

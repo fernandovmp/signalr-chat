@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import './styles.css';
 import Channel from '../../models/Channel';
-import ChannelItem from '../ChannelItem';
+import { ChannelItem } from '../ChannelItem';
+import './styles.css';
 
 export type onChannelSelectArgument = {
     previousSelectedChannel?: Channel;
