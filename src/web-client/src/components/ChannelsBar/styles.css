@@ -10,16 +10,6 @@
     padding: 0;
 }
 
-.channels-list li {
-    border-bottom: solid #999;
-    border-width: 1px;
-    margin: 0;
-}
-
-.channels-list li:hover {
-    background-color: #eee;
-}
-
 .channel-selected {
     background-color: #ddd;
 }

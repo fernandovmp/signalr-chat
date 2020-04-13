@@ -37,11 +37,12 @@ export const ChannelsBar: React.FC<propsType> = ({
                 {channels.map((channel) => (
                     <li
                         key={channel.id}
-                        className={
-                            channel.id === selectedChannel?.id
-                                ? 'channel-selected'
-                                : ''
-                        }
+                        className={`sidebar-tab 
+                            ${
+                                channel.id === selectedChannel?.id
+                                    ? 'channel-selected'
+                                    : ''
+                            }`}
                     >
                         <ChannelItem
                             channel={channel}
