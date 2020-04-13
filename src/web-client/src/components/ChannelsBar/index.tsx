@@ -53,5 +53,3 @@ export const ChannelsBar: React.FC<propsType> = ({
         </div>
     );
 };
-
-//export default ChannelsBar;
