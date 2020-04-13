@@ -4,6 +4,6 @@
     flex-direction: column;
     height: 350px;
     padding: 10px 20px;
-    grid-column: 1 1;
-    grid-row: 0 0;
+    grid-column: 2;
+    grid-row: 2;
 }
