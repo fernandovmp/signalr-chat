@@ -15,6 +15,7 @@ export const ChannelItem: React.FC<propsType> = ({ channel, onClick }) => {
     return (
         <div className="channel-container" onClick={handleOnClick}>
             <strong>{channel.name}</strong>
+            <small>{channel.description ?? 'No description'}</small>
         </div>
     );
 };

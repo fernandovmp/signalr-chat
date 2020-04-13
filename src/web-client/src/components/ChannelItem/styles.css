@@ -1,6 +1,13 @@
 .channel-container {
     margin: 0 10px;
+    padding: 10px;
     font-size: medium;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    border: 1px solid #b700ff;
+    border-radius: 4px;
+}
+
+.channel-container > small {
+    margin: 10px 0;
 }
