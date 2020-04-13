@@ -1,0 +1,43 @@
+.explore-tab {
+    grid-row-start: 2;
+    grid-row-end: 4;
+    grid-column: 2;
+}
+
+.explore-tab-header {
+    grid-row: 1;
+    grid-column: 2;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    background-color: darkorchid;
+}
+
+.explore-tab-header > button {
+    grid-row: 1;
+    grid-column: 2;
+    display: flex;
+    align-items: center;
+    margin: 5px;
+    padding: 10px;
+    background-color: transparent;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-weight: bold;
+}
+
+.explore-tab-header > button:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+}
+
+.explore-tab > .channel-list {
+    list-style: none;
+    padding: 0;
+}
+
+.channel-list > li {
+    margin: 10px 20%;
+    max-width: 500px;
+}
