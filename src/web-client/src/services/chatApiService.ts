@@ -6,12 +6,35 @@ export interface IChatApiService {
     createUser(username: string): Promise<User>;
     authenticate(username: string): Promise<User>;
     getChannelsAsync(): Promise<Channel[]>;
+    createChannelAsync(
+        name: string,
+        description: string,
+        administratorId: string
+    ): Promise<Channel>;
 }
 
 export class ChatApiService implements IChatApiService {
     private readonly baseUrl: string;
     constructor(url: string) {
         this.baseUrl = url;
+    }
+    async createChannelAsync(
+        name: string,
+        description: string,
+        administratorId: string
+    ): Promise<Channel> {
+        const response = await fetch(`${this.baseUrl}/channels`, {
+            method: 'POST',
+            headers: [
+                ['Content-Type', 'application/json'],
+                ['Authorization', administratorId],
+            ],
+            body: JSON.stringify({
+                name,
+                description,
+            }),
+        });
+        return response.json();
     }
     private async getErrors(response: Response): Promise<ErrorModel> {
         return response.json();
