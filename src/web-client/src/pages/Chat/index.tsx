@@ -2,16 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import {
-    ChannelsBar,
-    onChannelSelectArgument,
     ChatComponent,
     JoinNotification,
+    SideBar,
+    Tab,
 } from '../../components';
 import { IChatApiService, IChatService } from '../../services';
 import Message from '../../models/Message';
 import User from '../../models/User';
 import Channel from '../../models/Channel';
 import './styles.css';
+import { ExploreTab } from '../../components/ExploreTab';
 
 type propsType = {
     chatService: IChatService;
@@ -27,7 +28,6 @@ const ChatPage: React.FC<propsType> = ({ chatService, chatApiService }) => {
     const [joinedNotifications, setjoinedNotifications] = useState<string[]>(
         []
     );
-    const [channels, setChannels] = useState<Channel[]>([]);
     const [currentChannel, setCurrentChannel] = useState<Channel | undefined>(
         undefined
     );
@@ -72,39 +72,39 @@ const ChatPage: React.FC<propsType> = ({ chatService, chatApiService }) => {
         };
     }, [chatService]);
 
-    useEffect(() => {
-        const getChannels = async () => {
-            const channels = await chatApiService.getChannelsAsync();
-            setChannels(channels);
-        };
-        getChannels();
-    }, [chatApiService]);
-
-    const handleJoinChannel = async (arg: onChannelSelectArgument) => {
-        const { previousSelectedChannel, selectedChannel } = arg;
-        if (previousSelectedChannel !== undefined) {
+    const handleMenuSelected = async (arg: Tab | Channel) => {
+        if (currentChannel !== undefined) {
             await chatService.leaveChannelAsync(
-                previousSelectedChannel.id,
+                currentChannel.id,
                 user.username
             );
         }
-        await chatService.joinChannelAsync(selectedChannel.id, user.username);
-        setCurrentChannel(selectedChannel);
+        if ((arg as Channel).id) {
+            await chatService.joinChannelAsync(
+                (arg as Channel).id,
+                user.username
+            );
+            setCurrentChannel(arg as Channel);
+        } else {
+            setCurrentChannel(undefined);
+        }
     };
 
     return (
         <>
             <div className="chat-container">
-                <ChannelsBar
-                    channels={channels}
-                    onChannelSelect={handleJoinChannel}
+                <SideBar
+                    chatApiService={chatApiService}
+                    onMenuSelected={handleMenuSelected}
                 />
-                {currentChannel !== undefined && (
+                {currentChannel !== undefined ? (
                     <ChatComponent
                         chatService={chatService}
                         messages={messages}
                         currentChannel={currentChannel}
                     />
+                ) : (
+                    <ExploreTab chatApiService={chatApiService} />
                 )}
 
                 <div className="chat-notification-container">
