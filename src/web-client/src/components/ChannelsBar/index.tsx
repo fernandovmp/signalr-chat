@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Channel from '../../models/Channel';
-import { ChannelItem } from '../ChannelItem';
+import { ChatItem } from '../ChatItem';
 import './styles.css';
 
 export type onChannelSelectArgument = {
@@ -44,7 +44,7 @@ export const ChannelsBar: React.FC<propsType> = ({
                                     : ''
                             }`}
                     >
-                        <ChannelItem
+                        <ChatItem
                             channel={channel}
                             onClick={handleOnSelected}
                         />
