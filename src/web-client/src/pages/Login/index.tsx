@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import useLocalStorage from '../../hooks/useLocalStorage';
-import './styles.css';
 import { IChatApiService } from '../../services';
 import User from '../../models/User';
+import { getClassNames } from './styles';
 
 type propsType = {
     chatApiService: IChatApiService;
@@ -18,6 +18,12 @@ const LoginPage: React.FC<propsType> = ({ chatApiService }) => {
         user.username
     );
     const history = useHistory();
+    const {
+        loginForm,
+        loginFormButton,
+        loginFormInput,
+        loginFormLabel,
+    } = getClassNames();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -43,15 +49,18 @@ const LoginPage: React.FC<propsType> = ({ chatApiService }) => {
     };
 
     return (
-        <form className="login-form" onSubmit={handleSubmit}>
-            <label>
+        <form className={loginForm} onSubmit={handleSubmit}>
+            <label className={loginFormLabel}>
                 Username
                 <input
+                    className={loginFormInput}
                     value={usernameInputValue}
                     onChange={(e) => setUsernameInputValue(e.target.value)}
                 />
             </label>
-            <button type="submit">ENTRAR</button>
+            <button className={loginFormButton} type="submit">
+                ENTRAR
+            </button>
         </form>
     );
 };
