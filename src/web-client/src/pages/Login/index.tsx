@@ -4,6 +4,7 @@ import useLocalStorage from '../../hooks/useLocalStorage';
 import { IChatApiService } from '../../services';
 import User from '../../models/User';
 import { getClassNames } from './styles';
+import { getCommonStyles } from '../../styles/commonStyles';
 
 type propsType = {
     chatApiService: IChatApiService;
@@ -18,12 +19,8 @@ const LoginPage: React.FC<propsType> = ({ chatApiService }) => {
         user.username
     );
     const history = useHistory();
-    const {
-        loginForm,
-        loginFormButton,
-        loginFormInput,
-        loginFormLabel,
-    } = getClassNames();
+    const { formButton, formInput, formLabel } = getCommonStyles();
+    const { loginForm } = getClassNames();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -50,15 +47,15 @@ const LoginPage: React.FC<propsType> = ({ chatApiService }) => {
 
     return (
         <form className={loginForm} onSubmit={handleSubmit}>
-            <label className={loginFormLabel}>
+            <label className={formLabel}>
                 Username
                 <input
-                    className={loginFormInput}
+                    className={formInput}
                     value={usernameInputValue}
                     onChange={(e) => setUsernameInputValue(e.target.value)}
                 />
             </label>
-            <button className={loginFormButton} type="submit">
+            <button className={formButton} type="submit">
                 ENTRAR
             </button>
         </form>

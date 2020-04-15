@@ -2,7 +2,6 @@ import { cretaeStyle } from '../../styles/createStyle';
 
 export interface IExploreTabClassNames {
     exploreHeader: string;
-    tranparentButton: string;
     headerButton: string;
     exploreMain: string;
     channelsList: string;
@@ -37,17 +36,5 @@ export const getExploreTabStyles = cretaeStyle<IExploreTabClassNames>({
         margin: 5,
         padding: 10,
         fontWeight: 'bold',
-    },
-    tranparentButton: {
-        backgroundColor: 'transparent',
-        border: 'none',
-        borderRadius: 4,
-        color: 'white',
-        selectors: {
-            ':hover': {
-                backgroundColor: 'rgba(255, 255, 255, 0.5)',
-                cursor: 'pointer',
-            },
-        },
     },
 });

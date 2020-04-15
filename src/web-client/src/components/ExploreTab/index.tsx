@@ -4,6 +4,7 @@ import { IChatApiService } from '../../services';
 import { ChannelItem } from '../ChannelItem';
 import { CreateChannelForm } from '../CreateChannelForm';
 import { getExploreTabStyles } from './styles';
+import { getCommonStyles } from '../../styles/commonStyles';
 
 type propsType = {
     chatApiService: IChatApiService;
@@ -19,12 +20,12 @@ export const ExploreTab: React.FC<propsType> = ({ chatApiService }) => {
     const [contentType, setContentType] = useState<ExploreTabMainContent>(
         ExploreTabMainContent.Explore
     );
+    const { transparentButton } = getCommonStyles();
     const {
         channelsList,
         exploreHeader,
         exploreMain,
         headerButton,
-        tranparentButton,
     } = getExploreTabStyles();
 
     useEffect(() => {
@@ -40,7 +41,7 @@ export const ExploreTab: React.FC<propsType> = ({ chatApiService }) => {
             <header className={exploreHeader}>
                 {contentType !== ExploreTabMainContent.Explore && (
                     <button
-                        className={[headerButton, tranparentButton].join(' ')}
+                        className={[headerButton, transparentButton].join(' ')}
                         onClick={() =>
                             setContentType(ExploreTabMainContent.Explore)
                         }
@@ -49,7 +50,7 @@ export const ExploreTab: React.FC<propsType> = ({ chatApiService }) => {
                     </button>
                 )}
                 <button
-                    className={[headerButton, tranparentButton].join(' ')}
+                    className={[headerButton, transparentButton].join(' ')}
                     onClick={() =>
                         setContentType(ExploreTabMainContent.CreateChannel)
                     }
