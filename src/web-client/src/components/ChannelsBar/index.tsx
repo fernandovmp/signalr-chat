@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
 import Channel from '../../models/Channel';
 import { ChatItem } from '../ChatItem';
-import './styles.css';
+import { getChannelBarStyles } from './styles';
 
 export type onChannelSelectArgument = {
     previousSelectedChannel?: Channel;
     selectedChannel: Channel;
 };
 
+interface IChannelsBarStyles {
+    root?: string[];
+    listItem?: string[];
+}
+
 type propsType = {
+    styles?: IChannelsBarStyles;
     channels: Channel[];
     onChannelSelect?: (arg: onChannelSelectArgument) => void;
 };
@@ -16,10 +22,12 @@ type propsType = {
 export const ChannelsBar: React.FC<propsType> = ({
     channels,
     onChannelSelect,
+    styles,
 }) => {
     const [selectedChannel, setSelectedChannel] = useState<Channel | undefined>(
         undefined
     );
+    const { channelList, channelSelected } = getChannelBarStyles();
 
     const handleOnSelected = (channel: Channel) => {
         if (onChannelSelect !== undefined) {
@@ -32,17 +40,17 @@ export const ChannelsBar: React.FC<propsType> = ({
     };
 
     return (
-        <div className="channels-bar">
-            <ul className="channels-list">
+        <div className={styles?.root?.join(' ')}>
+            <ul className={channelList}>
                 {channels.map((channel) => (
                     <li
                         key={channel.id}
-                        className={`sidebar-tab 
+                        className={`
                             ${
                                 channel.id === selectedChannel?.id
-                                    ? 'channel-selected'
+                                    ? channelSelected
                                     : ''
-                            }`}
+                            } ${styles?.listItem?.join(' ')}`}
                     >
                         <ChatItem
                             channel={channel}

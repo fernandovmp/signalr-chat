@@ -23,7 +23,7 @@ export const SideBar: React.FC<propsType> = ({
         tabName: 'explore',
     });
     const [channels, setChannels] = useState<Channel[]>([]);
-    const { sidebar, exploreTab, sidebarTab } = getSidebarStyles();
+    const { sidebar, exploreTab, sidebarTab, channelsBar } = getSidebarStyles();
 
     useEffect(() => {
         const getChannels = async () => {
@@ -56,6 +56,10 @@ export const SideBar: React.FC<propsType> = ({
             </div>
 
             <ChannelsBar
+                styles={{
+                    root: [channelsBar],
+                    listItem: [sidebarTab],
+                }}
                 channels={channels}
                 onChannelSelect={(arg) =>
                     handleMenuSelected(arg.selectedChannel)

@@ -4,6 +4,7 @@ export interface ISidebarClassNames {
     sidebar: string;
     sidebarTab: string;
     exploreTab: string;
+    channelsBar: string;
 }
 
 export const getSidebarStyles = cretaeStyle<ISidebarClassNames>({
@@ -35,5 +36,8 @@ export const getSidebarStyles = cretaeStyle<ISidebarClassNames>({
                 marginRight: 4,
             },
         },
+    },
+    channelsBar: {
+        gridRow: '2',
     },
 });

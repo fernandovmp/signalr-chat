@@ -1,0 +1,16 @@
+import { cretaeStyle } from '../../styles/createStyle';
+
+export interface IChannelsBarClassNames {
+    channelList: string;
+    channelSelected: string;
+}
+
+export const getChannelBarStyles = cretaeStyle<IChannelsBarClassNames>({
+    channelList: {
+        listStyle: 'none',
+        padding: 0,
+    },
+    channelSelected: {
+        backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    },
+});
