@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { IChatApiService } from '../../services';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import User from '../../models/User';
-import './styles.css';
+import { getCommonStyles } from '../../styles/commonStyles';
+import { getCreateChannelFormStyles } from './styles';
 
 type propsType = {
     chatApiService: IChatApiService;
@@ -19,6 +20,8 @@ export const CreateChannelForm: React.FC<propsType> = ({
         id: '',
         username: '',
     });
+    const { formButton, formInput, formLabel } = getCommonStyles();
+    const { createChannelForm } = getCreateChannelFormStyles();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -33,22 +36,26 @@ export const CreateChannelForm: React.FC<propsType> = ({
     };
 
     return (
-        <form className="create-channel-form" onSubmit={handleSubmit}>
-            <label>
+        <form className={createChannelForm} onSubmit={handleSubmit}>
+            <label className={formLabel}>
                 Channel name:
                 <input
+                    className={formInput}
                     value={channelName}
                     onChange={(e) => setChannelName(e.target.value)}
                 />
             </label>
-            <label>
+            <label className={formLabel}>
                 Channel description:
                 <input
+                    className={formInput}
                     value={channelDescription}
                     onChange={(e) => setChannelDescription(e.target.value)}
                 />
             </label>
-            <button type="submit">Create</button>
+            <button className={formButton} type="submit">
+                Create
+            </button>
         </form>
     );
 };
