@@ -97,6 +97,7 @@ const ChatPage: React.FC<propsType> = ({ chatService, chatApiService }) => {
                 <SideBar
                     chatApiService={chatApiService}
                     onMenuSelected={handleMenuSelected}
+                    styles={[pageSideBar]}
                 />
                 {currentChannel !== undefined ? (
                     <ChatComponent
