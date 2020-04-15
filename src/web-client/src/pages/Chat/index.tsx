@@ -11,8 +11,8 @@ import { IChatApiService, IChatService } from '../../services';
 import Message from '../../models/Message';
 import User from '../../models/User';
 import Channel from '../../models/Channel';
-import './styles.css';
 import { ExploreTab } from '../../components/ExploreTab';
+import { getClassNames } from './styles';
 
 type propsType = {
     chatService: IChatService;
@@ -32,6 +32,7 @@ const ChatPage: React.FC<propsType> = ({ chatService, chatApiService }) => {
         undefined
     );
     const history = useHistory();
+    const { chatPage, pageSideBar } = getClassNames();
 
     useEffect(() => {
         const setupChatAsync = async () => {
@@ -92,7 +93,7 @@ const ChatPage: React.FC<propsType> = ({ chatService, chatApiService }) => {
 
     return (
         <>
-            <div className="chat-container">
+            <div className={chatPage}>
                 <SideBar
                     chatApiService={chatApiService}
                     onMenuSelected={handleMenuSelected}
