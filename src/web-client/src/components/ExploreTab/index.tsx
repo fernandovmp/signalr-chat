@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Channel from '../../models/Channel';
 import { IChatApiService } from '../../services';
-import './styles.css';
 import { ChannelItem } from '../ChannelItem';
 import { CreateChannelForm } from '../CreateChannelForm';
+import { getExploreTabStyles } from './styles';
 
 type propsType = {
     chatApiService: IChatApiService;
@@ -19,6 +19,13 @@ export const ExploreTab: React.FC<propsType> = ({ chatApiService }) => {
     const [contentType, setContentType] = useState<ExploreTabMainContent>(
         ExploreTabMainContent.Explore
     );
+    const {
+        channelsList,
+        exploreHeader,
+        exploreMain,
+        headerButton,
+        tranparentButton,
+    } = getExploreTabStyles();
 
     useEffect(() => {
         const getChannels = async () => {
@@ -30,9 +37,10 @@ export const ExploreTab: React.FC<propsType> = ({ chatApiService }) => {
 
     return (
         <>
-            <header className="explore-tab-header">
+            <header className={exploreHeader}>
                 {contentType !== ExploreTabMainContent.Explore && (
                     <button
+                        className={[headerButton, tranparentButton].join(' ')}
                         onClick={() =>
                             setContentType(ExploreTabMainContent.Explore)
                         }
@@ -41,6 +49,7 @@ export const ExploreTab: React.FC<propsType> = ({ chatApiService }) => {
                     </button>
                 )}
                 <button
+                    className={[headerButton, tranparentButton].join(' ')}
                     onClick={() =>
                         setContentType(ExploreTabMainContent.CreateChannel)
                     }
@@ -59,7 +68,7 @@ export const ExploreTab: React.FC<propsType> = ({ chatApiService }) => {
                     Create channel
                 </button>
             </header>
-            <main className="explore-tab">
+            <main className={exploreMain}>
                 {contentType === ExploreTabMainContent.CreateChannel ? (
                     <CreateChannelForm
                         chatApiService={chatApiService}
@@ -68,7 +77,7 @@ export const ExploreTab: React.FC<propsType> = ({ chatApiService }) => {
                         }
                     />
                 ) : (
-                    <ul className="channel-list">
+                    <ul className={channelsList}>
                         {channels.map((channel) => (
                             <li key={channel.id}>
                                 <ChannelItem channel={channel} />
