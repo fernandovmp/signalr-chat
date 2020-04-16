@@ -12,7 +12,7 @@ import Message from '../../models/Message';
 import User from '../../models/User';
 import Channel from '../../models/Channel';
 import { ExploreTab } from '../../components/ExploreTab';
-import { getClassNames } from './styles';
+import { getChatPageStyles } from './styles';
 
 type propsType = {
     chatService: IChatService;
@@ -32,7 +32,7 @@ const ChatPage: React.FC<propsType> = ({ chatService, chatApiService }) => {
         undefined
     );
     const history = useHistory();
-    const { chatPage, pageSideBar } = getClassNames();
+    const { chatPage, pageSideBar } = getChatPageStyles();
 
     useEffect(() => {
         const setupChatAsync = async () => {

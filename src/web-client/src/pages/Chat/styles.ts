@@ -5,7 +5,7 @@ export interface IChatPageClassNames {
     pageSideBar: string;
 }
 
-export const getClassNames = cretaeStyle<IChatPageClassNames>({
+export const getChatPageStyles = cretaeStyle<IChatPageClassNames>({
     chatPage: {
         display: 'grid',
         gridTemplateColumns: '20% 80%',
