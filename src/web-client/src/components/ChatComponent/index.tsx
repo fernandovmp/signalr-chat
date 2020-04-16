@@ -6,7 +6,7 @@ import MessageBalloon from './MessageBalloon';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import User from '../../models/User';
 import Channel from '../../models/Channel';
-import './styles.css';
+import { getChatComponentStyles } from './styles';
 
 type propsType = {
     chatService: IChatService;
@@ -23,6 +23,7 @@ export const ChatComponent: React.FC<propsType> = ({
         id: '',
         username: '',
     });
+    const { chatComponent } = getChatComponentStyles();
 
     const handleSend = async (inputValue: string) => {
         const message: Message = {
@@ -36,7 +37,7 @@ export const ChatComponent: React.FC<propsType> = ({
 
     return (
         <>
-            <div className="chat-messages">
+            <div className={chatComponent}>
                 {messages
                     .filter(
                         (message) => message.channelId === currentChannel?.id
