@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './styles.css';
+import { getChatInputAreaStyles } from './styles';
 
 type propsType = {
     handleSend(inputValue: string): void;
@@ -7,6 +7,7 @@ type propsType = {
 
 const ChatInputArea: React.FC<propsType> = ({ handleSend }) => {
     const [messageInputValue, setMessageInputValue] = useState('');
+    const { chatInputArea } = getChatInputAreaStyles();
 
     const onSendButtonClick = () => {
         handleSend(messageInputValue);
@@ -14,7 +15,7 @@ const ChatInputArea: React.FC<propsType> = ({ handleSend }) => {
     };
 
     return (
-        <div className="chat-input-area">
+        <div className={chatInputArea}>
             <textarea
                 placeholder="Type your message here..."
                 value={messageInputValue}
