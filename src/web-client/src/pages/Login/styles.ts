@@ -4,7 +4,7 @@ export interface ILoginClassNames {
     loginForm: string;
 }
 
-export const getClassNames = cretaeStyle<ILoginClassNames>({
+export const getLoginPageStyles = cretaeStyle<ILoginClassNames>({
     loginForm: {
         display: 'flex',
         flexDirection: 'column',

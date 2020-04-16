@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import { IChatApiService } from '../../services';
 import User from '../../models/User';
-import { getClassNames } from './styles';
+import { getLoginPageStyles } from './styles';
 import { getCommonStyles } from '../../styles/commonStyles';
 
 type propsType = {
@@ -20,7 +20,7 @@ const LoginPage: React.FC<propsType> = ({ chatApiService }) => {
     );
     const history = useHistory();
     const { formButton, formInput, formLabel } = getCommonStyles();
-    const { loginForm } = getClassNames();
+    const { loginForm } = getLoginPageStyles();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
