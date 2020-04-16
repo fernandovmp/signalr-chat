@@ -12,5 +12,10 @@ export const getChatComponentStyles = cretaeStyle<IChatComponentClassNames>({
         padding: '10px 20px',
         gridColumn: '2',
         gridRow: '2',
+        selectors: {
+            '> div': {
+                marginTop: 6,
+            },
+        },
     },
 });
