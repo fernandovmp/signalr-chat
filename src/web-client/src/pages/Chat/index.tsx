@@ -69,17 +69,7 @@ const ChatPage: React.FC<propsType> = ({ chatService, chatApiService }) => {
     }, [chatService]);
 
     const handleMenuSelected = async (arg: Tab | Channel) => {
-        if (currentChannel !== undefined) {
-            await chatService.leaveChannelAsync(
-                currentChannel.id,
-                user.username
-            );
-        }
         if ((arg as Channel).id) {
-            await chatService.joinChannelAsync(
-                (arg as Channel).id,
-                user.username
-            );
             setCurrentChannel(arg as Channel);
         } else {
             setCurrentChannel(undefined);
