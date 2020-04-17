@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import useLocalStorage from '../../hooks/useLocalStorage';
-import {
-    ChatComponent,
-    JoinNotification,
-    SideBar,
-    Tab,
-} from '../../components';
+import { ChatComponent, SideBar, Tab } from '../../components';
 import { IChatApiService, IChatService } from '../../services';
 import Message from '../../models/Message';
 import User from '../../models/User';
@@ -108,12 +103,6 @@ const ChatPage: React.FC<propsType> = ({ chatService, chatApiService }) => {
                 ) : (
                     <ExploreTab chatApiService={chatApiService} />
                 )}
-
-                <div className="chat-notification-container">
-                    {joinedNotifications.map((joinedUser) => (
-                        <JoinNotification username={joinedUser} />
-                    ))}
-                </div>
             </div>
         </>
     );
