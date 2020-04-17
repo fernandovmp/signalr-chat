@@ -12,21 +12,47 @@ import { getChatComponentStyles } from './styles';
 
 type propsType = {
     chatService: IChatService;
-    messages: Message[];
     currentChannel?: Channel;
 };
 
 export const ChatComponent: React.FC<propsType> = ({
     chatService,
-    messages,
     currentChannel,
 }) => {
     const [user] = useLocalStorage<User>('user', {
         id: '',
         username: '',
     });
+    const [messages, setMessages] = useState<Message[]>([]);
+    const [chatNotifications, setChatNotifications] = useState<string[]>([]);
     const { chatComponent } = getChatComponentStyles();
     const previousChannel = usePrevious(currentChannel);
+
+    useEffect(() => {
+        const setupChatAsync = async () => {
+            const notificationAction = (notificationMessage: string) => {
+                setChatNotifications((previousState) =>
+                    previousState.concat(notificationMessage)
+                );
+                setTimeout(
+                    () =>
+                        setChatNotifications((previousState) =>
+                            previousState.filter(
+                                (notification) =>
+                                    notification !== notificationMessage
+                            )
+                        ),
+                    6000
+                );
+            };
+            chatService.onUserJoined(notificationAction);
+            chatService.onUserLeft(notificationAction);
+            chatService.onReceiveMessage((message) => {
+                setMessages((previousState) => [...previousState, message]);
+            });
+        };
+        setupChatAsync();
+    }, [chatService]);
 
     useEffect(() => {
         if (

@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import { ChatComponent, SideBar, Tab } from '../../components';
 import { IChatApiService, IChatService } from '../../services';
-import Message from '../../models/Message';
 import User from '../../models/User';
 import Channel from '../../models/Channel';
 import { ExploreTab } from '../../components/ExploreTab';
@@ -19,10 +18,6 @@ const ChatPage: React.FC<propsType> = ({ chatService, chatApiService }) => {
         id: '',
         username: '',
     });
-    const [messages, setMessages] = useState<Message[]>([]);
-    const [joinedNotifications, setjoinedNotifications] = useState<string[]>(
-        []
-    );
     const [currentChannel, setCurrentChannel] = useState<Channel | undefined>(
         undefined
     );
@@ -30,35 +25,10 @@ const ChatPage: React.FC<propsType> = ({ chatService, chatApiService }) => {
     const { chatPage, pageSideBar } = getChatPageStyles();
 
     useEffect(() => {
-        const setupChatAsync = async () => {
+        const connectToChat = async () => {
             await chatService.connection.start();
-            const notificationAction = (notificationMessage: string) => {
-                setjoinedNotifications((previousState) =>
-                    previousState.concat(notificationMessage)
-                );
-                setTimeout(
-                    () =>
-                        setjoinedNotifications((previousState) =>
-                            previousState.filter(
-                                (notification) =>
-                                    notification !== notificationMessage
-                            )
-                        ),
-                    6000
-                );
-            };
-            chatService.onUserJoined(notificationAction);
-            chatService.onUserLeft(notificationAction);
-            chatService.onReceiveMessage((message) => {
-                setMessages((previousState) => [...previousState, message]);
-            });
         };
-        console.log(user);
-        if (user.username.trim() === '') {
-            history.push('/');
-            return;
-        }
-        setupChatAsync();
+        connectToChat();
 
         const cleanup = async () => {
             await chatService.disconect();
@@ -67,6 +37,12 @@ const ChatPage: React.FC<propsType> = ({ chatService, chatApiService }) => {
             cleanup();
         };
     }, [chatService]);
+
+    useEffect(() => {
+        if (user.username.trim() === '') {
+            history.push('/');
+        }
+    }, [user, history]);
 
     const handleMenuSelected = async (arg: Tab | Channel) => {
         if ((arg as Channel).id) {
@@ -87,7 +63,6 @@ const ChatPage: React.FC<propsType> = ({ chatService, chatApiService }) => {
                 {currentChannel !== undefined ? (
                     <ChatComponent
                         chatService={chatService}
-                        messages={messages}
                         currentChannel={currentChannel}
                     />
                 ) : (
