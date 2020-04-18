@@ -14,7 +14,7 @@ import { ChatHeader } from './ChatHeader';
 
 type propsType = {
     chatService: IChatService;
-    currentChannel?: Channel;
+    currentChannel: Channel;
 };
 
 export const ChatComponent: React.FC<propsType> = ({
