@@ -11,6 +11,16 @@ export interface IChatApiService {
         description: string,
         administratorId: string
     ): Promise<Channel>;
+    updateChannelName(
+        channelId: string,
+        name: string,
+        administratorId: string
+    ): Promise<void>;
+    updateDescriptionName(
+        channelId: string,
+        administratorId: string,
+        description?: string
+    ): Promise<void>;
 }
 
 export class ChatApiService implements IChatApiService {
@@ -70,5 +80,51 @@ export class ChatApiService implements IChatApiService {
     async getChannelsAsync(): Promise<Channel[]> {
         const response = await fetch(`${this.baseUrl}/channels`);
         return response.json();
+    }
+    async updateChannelName(
+        channelId: string,
+        name: string,
+        administratorId: string
+    ): Promise<void> {
+        const response = await fetch(
+            `${this.baseUrl}/channels/${channelId}/name`,
+            {
+                method: 'PUT',
+                headers: [
+                    ['Content-Type', 'application/json'],
+                    ['Authorization', administratorId],
+                ],
+                body: JSON.stringify({
+                    name,
+                }),
+            }
+        );
+        if (response.status !== 204) {
+            const error = await this.getErrors(response);
+            throw new Error(error.message);
+        }
+    }
+    async updateDescriptionName(
+        channelId: string,
+        administratorId: string,
+        description?: string
+    ): Promise<void> {
+        const response = await fetch(
+            `${this.baseUrl}/channels/${channelId}/description`,
+            {
+                method: 'PUT',
+                headers: [
+                    ['Content-Type', 'application/json'],
+                    ['Authorization', administratorId],
+                ],
+                body: JSON.stringify({
+                    description,
+                }),
+            }
+        );
+        if (response.status !== 204) {
+            const error = await this.getErrors(response);
+            throw new Error(error.message);
+        }
     }
 }
