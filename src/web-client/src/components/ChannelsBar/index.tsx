@@ -50,9 +50,10 @@ export const ChannelsBar: React.FC<propsType> = ({
                                 channel.id === selectedChannel?.id
                                     ? channelSelected
                                     : ''
-                            } ${styles?.listItem?.join(' ')}`}
+                            }`}
                     >
                         <ChatItem
+                            styles={styles?.listItem}
                             channel={channel}
                             onClick={handleOnSelected}
                         />

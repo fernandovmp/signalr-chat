@@ -15,7 +15,6 @@ export const getSidebarStyles = cretaeStyle<ISidebarClassNames>({
     },
     sidebarTab: {
         padding: 10,
-        margin: 10,
         height: 'max-content',
         borderRadius: 4,
         color: '#fff',
@@ -31,6 +30,7 @@ export const getSidebarStyles = cretaeStyle<ISidebarClassNames>({
         gridColumn: '1',
         display: 'flex',
         alignItems: 'center',
+        margin: 10,
         selectors: {
             '> svg': {
                 marginRight: 4,
