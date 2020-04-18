@@ -10,6 +10,7 @@ import usePrevious from '../../hooks/usePrevious';
 import { HubConnectionState } from '@microsoft/signalr';
 import { ChatNotification } from './ChatNotification';
 import { getChatComponentStyles } from './styles';
+import { ChatHeader } from './ChatHeader';
 
 type propsType = {
     chatService: IChatService;
@@ -26,7 +27,11 @@ export const ChatComponent: React.FC<propsType> = ({
     });
     const [messages, setMessages] = useState<Message[]>([]);
     const [chatNotifications, setChatNotifications] = useState<string[]>([]);
-    const { chatComponent, notificationsContainer } = getChatComponentStyles();
+    const {
+        chatComponent,
+        notificationsContainer,
+        chatHeader,
+    } = getChatComponentStyles();
     const previousChannel = usePrevious(currentChannel);
 
     useEffect(() => {
@@ -95,6 +100,7 @@ export const ChatComponent: React.FC<propsType> = ({
 
     return (
         <>
+            <ChatHeader styles={[chatHeader]} chat={currentChannel} />
             <div className={chatComponent}>
                 {messages
                     .filter(

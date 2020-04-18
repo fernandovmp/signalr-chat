@@ -1,11 +1,16 @@
 import { cretaeStyle } from '../../styles/createStyle';
 
 export interface IChatComponentClassNames {
+    chatHeader: string;
     chatComponent: string;
     notificationsContainer: string;
 }
 
 export const getChatComponentStyles = cretaeStyle<IChatComponentClassNames>({
+    chatHeader: {
+        gridRow: '1',
+        gridColumn: '2',
+    },
     chatComponent: {
         overflowY: 'scroll',
         display: 'flex',
