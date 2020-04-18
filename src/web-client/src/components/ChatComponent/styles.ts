@@ -2,6 +2,7 @@ import { cretaeStyle } from '../../styles/createStyle';
 
 export interface IChatComponentClassNames {
     chatComponent: string;
+    notificationsContainer: string;
 }
 
 export const getChatComponentStyles = cretaeStyle<IChatComponentClassNames>({
@@ -17,5 +18,14 @@ export const getChatComponentStyles = cretaeStyle<IChatComponentClassNames>({
                 marginTop: 6,
             },
         },
+    },
+    notificationsContainer: {
+        gridColumn: '2',
+        gridRow: '2',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-end',
+        justifyContent: 'flex-end',
+        marginRight: 15,
     },
 });

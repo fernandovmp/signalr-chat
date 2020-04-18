@@ -8,6 +8,7 @@ import User from '../../models/User';
 import Channel from '../../models/Channel';
 import usePrevious from '../../hooks/usePrevious';
 import { HubConnectionState } from '@microsoft/signalr';
+import { ChatNotification } from './ChatNotification';
 import { getChatComponentStyles } from './styles';
 
 type propsType = {
@@ -25,7 +26,7 @@ export const ChatComponent: React.FC<propsType> = ({
     });
     const [messages, setMessages] = useState<Message[]>([]);
     const [chatNotifications, setChatNotifications] = useState<string[]>([]);
-    const { chatComponent } = getChatComponentStyles();
+    const { chatComponent, notificationsContainer } = getChatComponentStyles();
     const previousChannel = usePrevious(currentChannel);
 
     useEffect(() => {
@@ -107,6 +108,11 @@ export const ChatComponent: React.FC<propsType> = ({
                     ))}
             </div>
             <ChatInputArea handleSend={handleSend} />
+            <div className={notificationsContainer}>
+                {chatNotifications.map((notification) => (
+                    <ChatNotification message={notification} />
+                ))}
+            </div>
         </>
     );
 };
