@@ -18,6 +18,7 @@ export class ChatService implements IChatService {
     constructor(url: string) {
         this.connection = new signalR.HubConnectionBuilder()
             .withUrl(url)
+            .withAutomaticReconnect()
             .build();
     }
     async disconect(): Promise<void> {
