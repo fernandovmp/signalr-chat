@@ -11,7 +11,8 @@ namespace SignalRChat.Server.Extensions
         public static IServiceCollection AddRepositories(this IServiceCollection services)
         {
             return services.AddScoped<IUserRepository, UserRepository>()
-                .AddScoped<IChannelRepository, ChannelRepository>();
+                .AddScoped<IChannelRepository, ChannelRepository>()
+                .AddScoped<IChatRepository, ChatRepository>();
         }
 
         public static IServiceCollection AddCommandHandlers(this IServiceCollection services)
@@ -20,7 +21,8 @@ namespace SignalRChat.Server.Extensions
                 .AddScoped<IHandler<CreateChannelCommand>, ChannelHandler>()
                 .AddScoped<IHandler<UpdateChannelNameCommand>, ChannelHandler>()
                 .AddScoped<IHandler<UpdateChannelDescriptionCommand>, ChannelHandler>()
-                .AddScoped<IHandler<DeleteChannelCommand>, ChannelHandler>();
+                .AddScoped<IHandler<DeleteChannelCommand>, ChannelHandler>()
+                .AddScoped<IHandler<JoinChannelCommand>, JoinChannelHandler>();
         }
     }
 }
