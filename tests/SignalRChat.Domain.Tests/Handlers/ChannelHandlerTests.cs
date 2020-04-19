@@ -231,6 +231,11 @@ namespace SignalRChat.Domain.Tests.Handlers
             fakeChannelRepository.Verify(
                 repository => repository.CreateChannel(It.IsAny<Channel>()),
                 Times.Once());
+            fakeChannelRepository.Verify(
+                repository => repository.AddUserToChannel(
+                    It.Is<Guid>(id => id == command.AdministratorId),
+                    It.Is<Guid>(id => id == resultOutput.Id),
+                    It.Is<bool>(isAdministrator => isAdministrator == true)));
         }
     }
 }
