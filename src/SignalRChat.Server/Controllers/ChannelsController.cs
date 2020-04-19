@@ -27,6 +27,12 @@ namespace SignalRChat.Server.Controllers
             return Ok(await _channelRepository.ListChannels());
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<ListChannelsQueryResult>>> GetChannelById([FromRoute] Guid id)
+        {
+            return Ok(await _channelRepository.GetById(id));
+        }
+
         [HttpPost]
         public async Task<ActionResult> CreateChannel(ChannelPostViewModel data,
             [FromHeader] Guid authorization,
