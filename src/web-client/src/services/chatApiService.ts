@@ -24,12 +24,25 @@ export interface IChatApiService {
     ): Promise<void>;
     getUserChats(user: User): Promise<Chat[]>;
     getChannel(channelId: string): Promise<Channel>;
+    joinChannel(channel: Channel, user: User): Promise<void>;
 }
 
 export class ChatApiService implements IChatApiService {
     private readonly baseUrl: string;
     constructor(url: string) {
         this.baseUrl = url;
+    }
+    async joinChannel(channel: Channel, user: User): Promise<void> {
+        await fetch(`${this.baseUrl}/chats`, {
+            method: 'POST',
+            headers: [
+                ['Content-Type', 'application/json'],
+                ['Authorization', user.id],
+            ],
+            body: JSON.stringify({
+                channelId: channel.id,
+            }),
+        });
     }
     async getChannel(channelId: string): Promise<Channel> {
         const response = await fetch(`${this.baseUrl}/channels/${channelId}`);
