@@ -1,6 +1,7 @@
 import User from '../models/User';
 import ErrorModel from '../models/ErrorModel';
 import Channel from '../models/Channel';
+import Chat from '../models/Chat';
 
 export interface IChatApiService {
     createUser(username: string): Promise<User>;
@@ -21,12 +22,24 @@ export interface IChatApiService {
         administratorId: string,
         description?: string
     ): Promise<void>;
+    getUserChats(user: User): Promise<Chat[]>;
+    getChannel(channelId: string): Promise<Channel>;
 }
 
 export class ChatApiService implements IChatApiService {
     private readonly baseUrl: string;
     constructor(url: string) {
         this.baseUrl = url;
+    }
+    async getChannel(channelId: string): Promise<Channel> {
+        const response = await fetch(`${this.baseUrl}/channels/${channelId}`);
+        return response.json();
+    }
+    async getUserChats(user: User): Promise<Chat[]> {
+        const response = await fetch(`${this.baseUrl}/chats`, {
+            headers: [['Authorization', user.id]],
+        });
+        return response.json();
     }
     async createChannelAsync(
         name: string,
