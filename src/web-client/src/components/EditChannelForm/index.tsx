@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import User from '../../models/User';
-import Channel from '../../models/Channel';
 import { useChatApiService } from '../../hooks/useChatApiService';
 import { getCommonStyles } from '../../styles/commonStyles';
 import { getEditChannelFormStyles } from './styles';
@@ -10,20 +9,18 @@ import CancelIcon from '../../assets/cancelIcon.svg';
 import SaveIcon from '../../assets/contentSaveEditIcon.svg';
 
 type propsType = {
-    channel: Channel;
+    channelId: string;
 };
 
-export const EditChannelForm: React.FC<propsType> = ({ channel }) => {
+export const EditChannelForm: React.FC<propsType> = ({ channelId }) => {
     const chatApiService = useChatApiService();
     const [channelNameEditEnabled, setChannelNameEditEnabled] = useState(false);
     const [
         channelDescriptionEditEnabled,
         setChannelDescriptionEditEnabled,
     ] = useState(false);
-    const [channelName, setChannelName] = useState(channel.name);
-    const [channelDescription, setChannelDescription] = useState(
-        channel.description
-    );
+    const [channelName, setChannelName] = useState('');
+    const [channelDescription, setChannelDescription] = useState('');
     const [user] = useLocalStorage<User>('user', {
         id: '',
         username: '',
@@ -31,19 +28,24 @@ export const EditChannelForm: React.FC<propsType> = ({ channel }) => {
     const { transparentButton, formInput, formLabel } = getCommonStyles();
     const { editChannelForm, editInput } = getEditChannelFormStyles();
 
+    useEffect(() => {
+        const fetchChannel = async () => {
+            const channel = await chatApiService.getChannel(channelId);
+            setChannelName(channel.name);
+            setChannelDescription(channel.description ?? '');
+        };
+        fetchChannel();
+    }, [chatApiService]);
+
     const handleUpdateName = async () => {
         setChannelNameEditEnabled(false);
-        await chatApiService.updateChannelName(
-            channel.id,
-            channelName,
-            user.id
-        );
+        await chatApiService.updateChannelName(channelId, channelName, user.id);
     };
 
     const handleUpdateDescription = async () => {
         setChannelDescriptionEditEnabled(false);
         await chatApiService.updateDescriptionName(
-            channel.id,
+            channelId,
             user.id,
             channelDescription
         );
