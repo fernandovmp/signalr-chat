@@ -86,5 +86,26 @@ namespace SignalRChat.Infrastructure.Data.Repositories
                 Name = name
             });
         }
+        public async Task AddUserToChannel(Guid userId, Guid channelId, bool isAdministrator)
+        {
+            string query = "insert into users_channels(userId, channelId, isAdministrator) "
+                + "values(@UserId, @ChannelId, @IsAdministrator);";
+            await _connection.ExecuteAsync(query, new
+            {
+                UserId = userId,
+                ChannelId = channelId,
+                IsAdministrator = isAdministrator
+            });
+        }
+        public async Task<bool> UserIsMemberOfChannel(Guid userId, Guid channelId)
+        {
+            string query = @"select top 1 1 from users_channels where userId = @UserId and channelId = @ChannelId;";
+            int? result = await _connection.QueryFirstOrDefaultAsync<int?>(query, new
+            {
+                UserId = userId,
+                ChannelId = channelId
+            });
+            return result.HasValue;
+        }
     }
 }
