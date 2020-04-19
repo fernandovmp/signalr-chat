@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import Channel from '../../models/Channel';
-import { ChannelsBar } from '../ChannelsBar';
-import { IChatApiService } from '../../services';
+import { ChatsBar } from './ChatsBar';
+import Chat from '../../models/Chat';
+import { useChatApiService } from '../../hooks/useChatApiService';
 import { getSidebarStyles } from './styles';
+import useLocalStorage from '../../hooks/useLocalStorage';
+import User from '../../models/User';
 
 type propsType = {
-    chatApiService: IChatApiService;
-    onMenuSelected?: (menu: Tab | Channel) => void;
+    onMenuSelected?: (menu: Tab | Chat) => void;
     styles?: [string];
 };
 
@@ -14,26 +16,27 @@ export type Tab = {
     tabName: string;
 };
 
-export const SideBar: React.FC<propsType> = ({
-    chatApiService,
-    onMenuSelected,
-    styles,
-}) => {
-    const [selectedMenu, setSelectedMenu] = useState<Channel | Tab>({
+export const SideBar: React.FC<propsType> = ({ onMenuSelected, styles }) => {
+    const [user] = useLocalStorage<User>('user', {
+        id: '',
+        username: '',
+    });
+    const [selectedMenu, setSelectedMenu] = useState<Chat | Tab>({
         tabName: 'explore',
     });
-    const [channels, setChannels] = useState<Channel[]>([]);
-    const { sidebar, exploreTab, sidebarTab, channelsBar } = getSidebarStyles();
+    const [chats, setChats] = useState<Chat[]>([]);
+    const chatApiService = useChatApiService();
+    const { sidebar, exploreTab, sidebarTab, chatsBar } = getSidebarStyles();
 
     useEffect(() => {
         const getChannels = async () => {
-            const channels = await chatApiService.getChannelsAsync();
-            setChannels(channels);
+            const chats = await chatApiService.getUserChats(user);
+            setChats(chats);
         };
         getChannels();
-    }, [chatApiService]);
+    }, [chatApiService, user]);
 
-    const handleMenuSelected = (menu: Tab | Channel) => {
+    const handleMenuSelected = (menu: Tab | Chat) => {
         setSelectedMenu(menu);
         if (onMenuSelected !== undefined) {
             onMenuSelected(menu);
@@ -55,15 +58,13 @@ export const SideBar: React.FC<propsType> = ({
                 Explore
             </div>
 
-            <ChannelsBar
+            <ChatsBar
                 styles={{
-                    root: [channelsBar],
+                    root: [chatsBar],
                     listItem: [sidebarTab],
                 }}
-                channels={channels}
-                onChannelSelect={(arg) =>
-                    handleMenuSelected(arg.selectedChannel)
-                }
+                chats={chats}
+                onChatSelect={(arg) => handleMenuSelected(arg.selectedChat)}
             />
         </div>
     );

@@ -4,9 +4,9 @@ import useLocalStorage from '../../hooks/useLocalStorage';
 import { ChatComponent, SideBar, Tab } from '../../components';
 import { IChatApiService, IChatService } from '../../services';
 import User from '../../models/User';
-import Channel from '../../models/Channel';
 import { ExploreTab } from '../../components/ExploreTab';
 import { getChatPageStyles } from './styles';
+import Chat from '../../models/Chat';
 
 type propsType = {
     chatService: IChatService;
@@ -18,9 +18,7 @@ const ChatPage: React.FC<propsType> = ({ chatService, chatApiService }) => {
         id: '',
         username: '',
     });
-    const [currentChannel, setCurrentChannel] = useState<Channel | undefined>(
-        undefined
-    );
+    const [currentChat, setCurrentChat] = useState<Chat | undefined>(undefined);
     const history = useHistory();
     const { chatPage, pageSideBar } = getChatPageStyles();
 
@@ -44,11 +42,11 @@ const ChatPage: React.FC<propsType> = ({ chatService, chatApiService }) => {
         }
     }, [user, history]);
 
-    const handleMenuSelected = async (arg: Tab | Channel) => {
-        if ((arg as Channel).id) {
-            setCurrentChannel(arg as Channel);
+    const handleMenuSelected = async (arg: Tab | Chat) => {
+        if ((arg as Chat).id) {
+            setCurrentChat(arg as Chat);
         } else {
-            setCurrentChannel(undefined);
+            setCurrentChat(undefined);
         }
     };
 
@@ -56,14 +54,13 @@ const ChatPage: React.FC<propsType> = ({ chatService, chatApiService }) => {
         <>
             <div className={chatPage}>
                 <SideBar
-                    chatApiService={chatApiService}
                     onMenuSelected={handleMenuSelected}
                     styles={[pageSideBar]}
                 />
-                {currentChannel !== undefined ? (
+                {currentChat !== undefined ? (
                     <ChatComponent
                         chatService={chatService}
-                        currentChannel={currentChannel}
+                        currentChat={currentChat}
                     />
                 ) : (
                     <ExploreTab chatApiService={chatApiService} />
