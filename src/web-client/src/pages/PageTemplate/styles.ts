@@ -11,7 +11,7 @@ export const getPageTemplateStyles = cretaeStyle<IPageTemplateClassNames>({
     pageTemplate: {
         display: 'grid',
         gridTemplateColumns: '20% 80%',
-        gridTemplateRows: '60px auto',
+        gridTemplateRows: '60px minmax(0, 1fr)',
         position: 'fixed',
         top: 0,
         bottom: 0,
