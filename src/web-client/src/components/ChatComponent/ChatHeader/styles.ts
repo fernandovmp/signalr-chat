@@ -7,8 +7,6 @@ interface IChatHeaderClassNames {
 
 export const getChatHeaderStyles = cretaeStyle<IChatHeaderClassNames>({
     chatHeader: {
-        background: 'darkorchid',
-        color: 'white',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',

@@ -1,25 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { getChatHeaderStyles } from './styles';
 import { getCommonStyles } from '../../../styles/commonStyles';
 import { PopupComponent } from '../../PopupComponent';
 import { EditChannelForm } from '../../EditChannelForm';
 import Chat from '../../../models/Chat';
+import { useChatApiService } from '../../../hooks/useChatApiService';
+import { useParams } from 'react-router-dom';
+import useLocalStorage from '../../../hooks/useLocalStorage';
+import User from '../../../models/User';
 
-type propsType = {
-    styles?: string[];
-    chat: Chat;
-};
-
-export const ChatHeader: React.FC<propsType> = ({ styles, chat }) => {
+export const ChatHeader: React.FC = () => {
+    const [chat, setChat] = useState<Chat | undefined>(undefined);
+    const [user] = useLocalStorage<User>('user', {
+        id: '',
+        username: '',
+    });
     const { chatHeader, chatEditButton } = getChatHeaderStyles();
     const { transparentButton } = getCommonStyles();
-
+    const chatApiService = useChatApiService();
     const [shouldShowEditPopup, setShouldShowEditPopup] = useState(false);
 
+    const { id } = useParams();
+
+    useEffect(() => {
+        const fetchChat = async () => {
+            const _chat = await chatApiService.getChat(id ?? '', user);
+            setChat(_chat);
+        };
+        fetchChat();
+    }, [chatApiService, id]);
+
     return (
-        <header className={`${chatHeader} ${styles?.join(' ')}`}>
-            <strong>{chat.name}</strong>
-            {chat.isAdministrator && (
+        <header className={chatHeader}>
+            <strong>{chat?.name}</strong>
+            {chat?.isAdministrator && (
                 <button
                     className={[transparentButton, chatEditButton].join(' ')}
                     onClick={() => setShouldShowEditPopup(!shouldShowEditPopup)}
@@ -41,7 +55,7 @@ export const ChatHeader: React.FC<propsType> = ({ styles, chat }) => {
                 <PopupComponent
                     onCloseButtonClick={() => setShouldShowEditPopup(false)}
                 >
-                    <EditChannelForm channelId={chat.id} />
+                    <EditChannelForm channelId={chat?.id ?? ''} />
                 </PopupComponent>
             )}
         </header>
