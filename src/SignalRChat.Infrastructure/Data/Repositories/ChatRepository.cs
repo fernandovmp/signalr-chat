@@ -16,6 +16,19 @@ namespace SignalRChat.Infrastructure.Data.Repositories
             _connection = connection;
         }
 
+        public async Task<ListUserChatsQueryResult> GetUserChat(Guid userId, Guid chatId)
+        {
+            string query = "select channels.id, channels.name, users_channels.isAdministrator "
+                + "from users_channels "
+                + "inner join channels on channels.id = users_channels.channelId "
+                + "where users_channels.userId = @UserId and users_channels.channelId = @ChatId";
+            return await _connection.QueryFirstOrDefaultAsync<ListUserChatsQueryResult>(query, new
+            {
+                UserId = userId,
+                ChatId = chatId
+            });
+        }
+
         public async Task<IEnumerable<ListUserChatsQueryResult>> ListUserChats(Guid userId)
         {
             string query = "select channels.id, channels.name, users_channels.isAdministrator "

@@ -21,10 +21,18 @@ namespace SignalRChat.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ListChannelsQueryResult>>> ListChannels(
+        public async Task<ActionResult<IEnumerable<ListChannelsQueryResult>>> ListChats(
             [FromHeader] Guid authorization)
         {
             return Ok(await _chatRepository.ListUserChats(authorization));
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<ListChannelsQueryResult>>> GetChat(
+            [FromRoute] Guid id,
+            [FromHeader] Guid authorization)
+        {
+            return Ok(await _chatRepository.GetUserChat(authorization, id));
         }
 
         [HttpPost]
