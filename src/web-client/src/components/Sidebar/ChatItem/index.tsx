@@ -1,6 +1,6 @@
 import React from 'react';
-import Channel from '../../../models/Channel';
 import Chat from '../../../models/Chat';
+import { useHistory } from 'react-router-dom';
 
 type propsType = {
     styles?: string[];
@@ -9,7 +9,9 @@ type propsType = {
 };
 
 export const ChatItem: React.FC<propsType> = ({ chat, onClick, styles }) => {
+    const history = useHistory();
     const handleOnClick = () => {
+        history.push(`/chat/${chat.id}`);
         if (!onClick) return;
         onClick(chat);
     };
