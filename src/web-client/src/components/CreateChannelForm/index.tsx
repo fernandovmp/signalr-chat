@@ -4,35 +4,29 @@ import useLocalStorage from '../../hooks/useLocalStorage';
 import User from '../../models/User';
 import { getCommonStyles } from '../../styles/commonStyles';
 import { getCreateChannelFormStyles } from './styles';
+import { useChatApiService } from '../../hooks/useChatApiService';
+import { useHistory } from 'react-router-dom';
 
-type propsType = {
-    chatApiService: IChatApiService;
-    onSubmit?: () => void;
-};
-
-export const CreateChannelForm: React.FC<propsType> = ({
-    chatApiService,
-    onSubmit,
-}) => {
+export const CreateChannelForm: React.FC = () => {
     const [channelName, setChannelName] = useState('');
     const [channelDescription, setChannelDescription] = useState('');
     const [user] = useLocalStorage<User>('user', {
         id: '',
         username: '',
     });
+    const chatApiService = useChatApiService();
+    const history = useHistory();
     const { formButton, formInput, formLabel } = getCommonStyles();
     const { createChannelForm } = getCreateChannelFormStyles();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        await chatApiService.createChannelAsync(
+        const channel = await chatApiService.createChannelAsync(
             channelName,
             channelDescription,
             user.id
         );
-        if (onSubmit) {
-            onSubmit();
-        }
+        history.push(`/chat/${channel.id}`);
     };
 
     return (
