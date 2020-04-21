@@ -39,7 +39,7 @@ const LoginPage: React.FC = () => {
         }
         setUser(authenticatedUser);
         //Wait for useEffect/ComponentDidMount call of useLocalStorage
-        setTimeout(() => history.push('/chat'), 10);
+        setTimeout(() => history.push('/explore'), 10);
     };
 
     return (
