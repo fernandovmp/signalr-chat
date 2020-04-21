@@ -1,53 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import Channel from '../../models/Channel';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { ChatsBar } from './ChatsBar';
-import Chat from '../../models/Chat';
-import { useChatApiService } from '../../hooks/useChatApiService';
 import { getSidebarStyles } from './styles';
-import useLocalStorage from '../../hooks/useLocalStorage';
-import User from '../../models/User';
 
 type propsType = {
-    onMenuSelected?: (menu: Tab | Chat) => void;
     styles?: [string];
 };
 
-export type Tab = {
-    tabName: string;
-};
-
-export const SideBar: React.FC<propsType> = ({ onMenuSelected, styles }) => {
-    const [user] = useLocalStorage<User>('user', {
-        id: '',
-        username: '',
-    });
-    const [selectedMenu, setSelectedMenu] = useState<Chat | Tab>({
-        tabName: 'explore',
-    });
-    const [chats, setChats] = useState<Chat[]>([]);
-    const chatApiService = useChatApiService();
+export const SideBar: React.FC<propsType> = ({ styles }) => {
+    const history = useHistory();
     const { sidebar, exploreTab, sidebarTab, chatsBar } = getSidebarStyles();
 
-    useEffect(() => {
-        const getChannels = async () => {
-            const chats = await chatApiService.getUserChats(user);
-            setChats(chats);
-        };
-        getChannels();
-    }, [chatApiService, user]);
-
-    const handleMenuSelected = (menu: Tab | Chat) => {
-        setSelectedMenu(menu);
-        if (onMenuSelected !== undefined) {
-            onMenuSelected(menu);
-        }
+    const handleOnExploreTabClick = () => {
+        history.push('/explore');
     };
 
     return (
         <div className={sidebar + ' ' + styles?.join(' ')}>
             <div
                 className={[exploreTab, sidebarTab].join(' ')}
-                onClick={() => handleMenuSelected({ tabName: 'explore' })}
+                onClick={handleOnExploreTabClick}
             >
                 <svg width="24" height="24" viewBox="0 0 24 24">
                     <path
@@ -63,8 +35,6 @@ export const SideBar: React.FC<propsType> = ({ onMenuSelected, styles }) => {
                     root: [chatsBar],
                     listItem: [sidebarTab],
                 }}
-                chats={chats}
-                onChatSelect={(arg) => handleMenuSelected(arg.selectedChat)}
             />
         </div>
     );

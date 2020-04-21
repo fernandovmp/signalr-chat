@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChatItem } from '../ChatItem';
 import { getChatsBarStyles } from './styles';
 import Chat from '../../../models/Chat';
+import useLocalStorage from '../../../hooks/useLocalStorage';
+import { useChatApiService } from '../../../hooks/useChatApiService';
+import User from '../../../models/User';
 
 export type onChannelSelectArgument = {
     previousSelectedChat?: Chat;
@@ -15,46 +18,31 @@ interface IChatsBarStyles {
 
 type propsType = {
     styles?: IChatsBarStyles;
-    chats: Chat[];
-    onChatSelect?: (arg: onChannelSelectArgument) => void;
 };
 
-export const ChatsBar: React.FC<propsType> = ({
-    chats,
-    onChatSelect,
-    styles,
-}) => {
-    const [selectedChat, setSelectedChat] = useState<Chat | undefined>(
-        undefined
-    );
+export const ChatsBar: React.FC<propsType> = ({ styles }) => {
+    const [user] = useLocalStorage<User>('user', {
+        id: '',
+        username: '',
+    });
+    const [chats, setChats] = useState<Chat[]>([]);
+    const chatApiService = useChatApiService();
     const { chatList, chatSelected } = getChatsBarStyles();
 
-    const handleOnSelected = (chat: Chat) => {
-        if (onChatSelect !== undefined) {
-            onChatSelect({
-                previousSelectedChat: selectedChat,
-                selectedChat: chat,
-            });
-        }
-        setSelectedChat(chat);
-    };
+    useEffect(() => {
+        const getChannels = async () => {
+            const chats = await chatApiService.getUserChats(user);
+            setChats(chats);
+        };
+        getChannels();
+    }, [chatApiService, user]);
 
     return (
         <div className={styles?.root?.join(' ')}>
             <ul className={chatList}>
                 {chats.map((chat) => (
-                    <li
-                        key={chat.id}
-                        className={`
-                            ${
-                                chat.id === selectedChat?.id ? chatSelected : ''
-                            }`}
-                    >
-                        <ChatItem
-                            styles={styles?.listItem}
-                            chat={chat}
-                            onClick={handleOnSelected}
-                        />
+                    <li key={chat.id}>
+                        <ChatItem styles={styles?.listItem} chat={chat} />
                     </li>
                 ))}
             </ul>
