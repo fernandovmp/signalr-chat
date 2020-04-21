@@ -17,7 +17,7 @@ export const getExploreMainStyles = cretaeStyle<IExploreMainClassNames>({
         },
     },
     exploreMain: {
-        gridRow: '2',
-        gridColumn: '2',
+        overflowY: 'scroll',
+        height: '100%',
     },
 });
