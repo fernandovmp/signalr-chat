@@ -1,26 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import ChatInputArea from './ChatInputArea';
-import { IChatService } from '../../services';
+import { ChatService } from '../../services';
 import Message from '../../models/Message';
 import MessageBalloon from './MessageBalloon';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import User from '../../models/User';
 import usePrevious from '../../hooks/usePrevious';
-import { HubConnectionState } from '@microsoft/signalr';
 import { ChatNotification } from './ChatNotification';
 import { getChatComponentStyles } from './styles';
-import { ChatHeader } from './ChatHeader';
-import Chat from '../../models/Chat';
+import { useParams } from 'react-router-dom';
+import { HubConnectionState } from '@microsoft/signalr';
 
-type propsType = {
-    chatService: IChatService;
-    currentChat: Chat;
-};
-
-export const ChatComponent: React.FC<propsType> = ({
-    chatService,
-    currentChat,
-}) => {
+export const ChatComponent: React.FC = () => {
     const [user] = useLocalStorage<User>('user', {
         id: '',
         username: '',
@@ -30,12 +21,26 @@ export const ChatComponent: React.FC<propsType> = ({
     const {
         chatComponent,
         notificationsContainer,
-        chatHeader,
+        chatMessages,
     } = getChatComponentStyles();
-    const previousChat = usePrevious(currentChat);
+    const { id } = useParams();
+    const previousChat = usePrevious(id);
+    const [chatService, setChatService] = useState(
+        new ChatService('https://localhost:5001/chatHub')
+    );
 
     useEffect(() => {
         const setupChatAsync = async () => {
+            const chatService = new ChatService(
+                'https://localhost:5001/chatHub'
+            );
+            await chatService.connection.start();
+            const joinChannel = async () => {
+                if (id !== undefined) {
+                    await chatService.joinChannelAsync(id, user.username);
+                }
+            };
+            joinChannel();
             const notificationAction = (notificationMessage: string) => {
                 setChatNotifications((previousState) =>
                     previousState.concat(notificationMessage)
@@ -56,41 +61,35 @@ export const ChatComponent: React.FC<propsType> = ({
             chatService.onReceiveMessage((message) => {
                 setMessages((previousState) => [...previousState, message]);
             });
+            setChatService(chatService);
         };
         setupChatAsync();
-    }, [chatService]);
+        const cleanup = async () => {
+            await chatService.disconect();
+        };
+        return () => {
+            cleanup();
+        };
+    }, [id]);
 
     useEffect(() => {
-        if (
-            chatService.connection.state === HubConnectionState.Connected &&
-            previousChat !== undefined
-        ) {
-            const leaveChannel = async () =>
+        const leaveChannel = async () => {
+            if (
+                previousChat !== undefined &&
+                chatService.connection.state === HubConnectionState.Connected
+            ) {
                 await chatService.leaveChannelAsync(
-                    previousChat.id,
+                    previousChat,
                     user.username
                 );
-            leaveChannel();
-        }
-    }, [chatService, currentChat, user]);
-
-    useEffect(() => {
-        if (
-            chatService.connection.state === HubConnectionState.Connected &&
-            currentChat !== undefined
-        ) {
-            const joinChannel = async () =>
-                await chatService.joinChannelAsync(
-                    currentChat.id,
-                    user.username
-                );
-            joinChannel();
-        }
-    }, [chatService, currentChat, user]);
+            }
+        };
+        leaveChannel();
+    }, [id]);
 
     const handleSend = async (inputValue: string) => {
         const message: Message = {
-            channelId: currentChat.id,
+            channelId: id ?? '',
             sender: user.username,
             content: inputValue,
             date: new Date(),
@@ -99,11 +98,10 @@ export const ChatComponent: React.FC<propsType> = ({
     };
 
     return (
-        <>
-            <ChatHeader styles={[chatHeader]} chat={currentChat} />
-            <div className={chatComponent}>
+        <div className={chatComponent}>
+            <div className={chatMessages}>
                 {messages
-                    .filter((message) => message.channelId === currentChat.id)
+                    .filter((message) => message.channelId === id)
                     .map((message) => (
                         <MessageBalloon
                             key={`${message.date}-${message.sender}`}
@@ -117,6 +115,6 @@ export const ChatComponent: React.FC<propsType> = ({
                     <ChatNotification message={notification} />
                 ))}
             </div>
-        </>
+        </div>
     );
 };
