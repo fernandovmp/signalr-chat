@@ -53,7 +53,7 @@ const LoginPage: React.FC = () => {
                 />
             </label>
             <button className={formButton} type="submit">
-                ENTRAR
+                LOGIN
             </button>
         </form>
     );
