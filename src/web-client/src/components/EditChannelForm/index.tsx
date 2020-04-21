@@ -35,7 +35,7 @@ export const EditChannelForm: React.FC<propsType> = ({ channelId }) => {
             setChannelDescription(channel.description ?? '');
         };
         fetchChannel();
-    }, [chatApiService]);
+    }, [chatApiService, channelId]);
 
     const handleUpdateName = async () => {
         setChannelNameEditEnabled(false);

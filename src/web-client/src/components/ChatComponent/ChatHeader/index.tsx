@@ -28,7 +28,7 @@ export const ChatHeader: React.FC = () => {
             setChat(_chat);
         };
         fetchChat();
-    }, [chatApiService, id]);
+    }, [chatApiService, id, user]);
 
     return (
         <header className={chatHeader}>
