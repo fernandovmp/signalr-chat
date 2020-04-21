@@ -10,8 +10,8 @@ export const getChatInputAreaStyles = cretaeStyle<IChatInputAreaClassNames>({
         padding: 15,
         alignItems: 'center',
         background: '#e0e0e0',
-        gridColumn: '2',
-        gridRow: '3',
+        gridColumn: '1',
+        gridRow: '2',
         selectors: {
             '> textarea': {
                 flex: 1,

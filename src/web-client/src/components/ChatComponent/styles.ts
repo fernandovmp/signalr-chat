@@ -1,32 +1,34 @@
 import { cretaeStyle } from '../../styles/createStyle';
 
 export interface IChatComponentClassNames {
-    chatHeader: string;
+    chatMessages: string;
     chatComponent: string;
     notificationsContainer: string;
 }
 
 export const getChatComponentStyles = cretaeStyle<IChatComponentClassNames>({
-    chatHeader: {
-        gridRow: '1',
-        gridColumn: '2',
-    },
-    chatComponent: {
+    chatMessages: {
         overflowY: 'scroll',
         display: 'flex',
         flexDirection: 'column',
         padding: '10px 20px',
-        gridColumn: '2',
-        gridRow: '2',
+        gridColumn: '1',
+        gridRow: '1',
         selectors: {
             '> div': {
                 marginTop: 6,
             },
         },
     },
+    chatComponent: {
+        display: 'grid',
+        gridTemplateRows: '1fr 70px',
+        gridTemplateColumns: '1fr',
+        height: '100%',
+    },
     notificationsContainer: {
-        gridColumn: '2',
-        gridRow: '2',
+        gridColumn: '1',
+        gridRow: '1',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-end',
