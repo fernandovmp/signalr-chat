@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { IChatApiService } from '../../services';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import User from '../../models/User';
 import { getCommonStyles } from '../../styles/commonStyles';
