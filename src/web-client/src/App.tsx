@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import LoginPage from './pages/Login';
-import { ChatApiService, ChatService } from './services';
 import PageTemplate from './pages/PageTemplate';
 import { routes } from './routes';
 
