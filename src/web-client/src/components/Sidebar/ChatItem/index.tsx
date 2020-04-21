@@ -5,15 +5,12 @@ import { useHistory } from 'react-router-dom';
 type propsType = {
     styles?: string[];
     chat: Chat;
-    onClick?: (chat: Chat) => void;
 };
 
-export const ChatItem: React.FC<propsType> = ({ chat, onClick, styles }) => {
+export const ChatItem: React.FC<propsType> = ({ chat, styles }) => {
     const history = useHistory();
     const handleOnClick = () => {
         history.push(`/chat/${chat.id}`);
-        if (!onClick) return;
-        onClick(chat);
     };
     return (
         <div className={styles?.join(' ')} onClick={handleOnClick}>
