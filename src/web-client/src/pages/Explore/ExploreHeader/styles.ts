@@ -10,6 +10,7 @@ export const getExploreHeaderStyles = cretaeStyle<IExploreHeaderClassNames>({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'flex-end',
+        height: '100%',
     },
     headerButton: {
         display: 'flex',

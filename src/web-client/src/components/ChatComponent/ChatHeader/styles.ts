@@ -10,6 +10,7 @@ export const getChatHeaderStyles = cretaeStyle<IChatHeaderClassNames>({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        height: '100%',
     },
     chatEditButton: {
         marginLeft: 30,
