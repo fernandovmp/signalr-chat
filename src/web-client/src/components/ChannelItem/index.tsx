@@ -4,6 +4,7 @@ import { useChatApiService } from '../../hooks/useChatApiService';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import User from '../../models/User';
 import { getChannelItemStyles } from './styles';
+import { useHistory } from 'react-router-dom';
 
 type propsType = {
     channel: Channel;
@@ -15,6 +16,7 @@ export const ChannelItem: React.FC<propsType> = ({ channel }) => {
         id: '',
         username: '',
     });
+    const history = useHistory();
     const {
         channelItem,
         descriptionSection,
@@ -23,6 +25,7 @@ export const ChannelItem: React.FC<propsType> = ({ channel }) => {
 
     const handleJoin = async () => {
         await chatApiService.joinChannel(channel, user);
+        history.push(`/chat/${channel.id}`);
     };
 
     return (
