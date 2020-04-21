@@ -1,16 +1,12 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import useLocalStorage from '../../hooks/useLocalStorage';
-import { IChatApiService } from '../../services';
 import User from '../../models/User';
 import { getLoginPageStyles } from './styles';
 import { getCommonStyles } from '../../styles/commonStyles';
+import { useChatApiService } from '../../hooks/useChatApiService';
 
-type propsType = {
-    chatApiService: IChatApiService;
-};
-
-const LoginPage: React.FC<propsType> = ({ chatApiService }) => {
+const LoginPage: React.FC = () => {
     const [user, setUser] = useLocalStorage<User>('user', {
         id: '',
         username: '',
@@ -18,6 +14,7 @@ const LoginPage: React.FC<propsType> = ({ chatApiService }) => {
     const [usernameInputValue, setUsernameInputValue] = useState<string>(
         user.username
     );
+    const chatApiService = useChatApiService();
     const history = useHistory();
     const { formButton, formInput, formLabel } = getCommonStyles();
     const { loginForm } = getLoginPageStyles();
