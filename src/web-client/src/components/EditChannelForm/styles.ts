@@ -2,7 +2,6 @@ import { cretaeStyle } from '../../styles/createStyle';
 
 export interface IEditChannelFormClassNames {
     editChannelForm: string;
-    editInput: string;
 }
 
 export const getEditChannelFormStyles = cretaeStyle<IEditChannelFormClassNames>(
@@ -14,14 +13,6 @@ export const getEditChannelFormStyles = cretaeStyle<IEditChannelFormClassNames>(
             selectors: {
                 '> label': {
                     marginTop: 10,
-                },
-            },
-        },
-        editInput: {
-            display: 'flex',
-            selectors: {
-                '> input': {
-                    flexGrow: 1,
                 },
             },
         },
