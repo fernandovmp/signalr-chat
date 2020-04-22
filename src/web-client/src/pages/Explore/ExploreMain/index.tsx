@@ -7,7 +7,7 @@ import { useChatApiService } from '../../../hooks/useChatApiService';
 export const ExploreMain: React.FC = () => {
     const [channels, setChannels] = useState<Channel[]>([]);
     const chatApiService = useChatApiService();
-    const { channelsList, exploreMain } = getExploreMainStyles();
+    const { channelsList, exploreMain, emptyListText } = getExploreMainStyles();
 
     useEffect(() => {
         const getChannels = async () => {
@@ -25,6 +25,10 @@ export const ExploreMain: React.FC = () => {
                         <ChannelItem channel={channel} />
                     </li>
                 ))}
+
+                {channels.length === 0 && (
+                    <div className={emptyListText}>No channels availible</div>
+                )}
             </ul>
         </main>
     );

@@ -3,6 +3,7 @@ import { cretaeStyle } from '../../../styles/createStyle';
 export interface IExploreMainClassNames {
     exploreMain: string;
     channelsList: string;
+    emptyListText: string;
 }
 
 export const getExploreMainStyles = cretaeStyle<IExploreMainClassNames>({
@@ -19,5 +20,12 @@ export const getExploreMainStyles = cretaeStyle<IExploreMainClassNames>({
     exploreMain: {
         overflowY: 'scroll',
         height: '100%',
+    },
+    emptyListText: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: '#999',
+        fontStyle: 'italic',
     },
 });
