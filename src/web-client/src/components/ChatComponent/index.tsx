@@ -9,7 +9,6 @@ import usePrevious from '../../hooks/usePrevious';
 import { ChatNotification } from './ChatNotification';
 import { getChatComponentStyles } from './styles';
 import { useParams } from 'react-router-dom';
-import { HubConnectionState } from '@microsoft/signalr';
 
 export const ChatComponent: React.FC = () => {
     const [user] = useLocalStorage<User>('user', {
@@ -25,76 +24,60 @@ export const ChatComponent: React.FC = () => {
     } = getChatComponentStyles();
     const { id } = useParams();
     const previousChat = usePrevious(id);
-    const [chatService, setChatService] = useState(
+    const [chatService] = useState(
         new ChatService('https://localhost:5001/chatHub')
     );
 
     useEffect(() => {
-        const setupChatAsync = async () => {
-            const chatService = new ChatService(
-                'https://localhost:5001/chatHub'
+        const notificationAction = (notificationMessage: string) => {
+            setChatNotifications((previousState) =>
+                previousState.concat(notificationMessage)
             );
-            await chatService.connection.start();
-            const joinChannel = async () => {
-                if (id !== undefined) {
-                    await chatService.joinChannelAsync(id, user.username);
-                }
-            };
-            joinChannel();
-            const notificationAction = (notificationMessage: string) => {
-                setChatNotifications((previousState) =>
-                    previousState.concat(notificationMessage)
-                );
-                setTimeout(
-                    () =>
-                        setChatNotifications((previousState) =>
-                            previousState.filter(
-                                (notification) =>
-                                    notification !== notificationMessage
-                            )
-                        ),
-                    6000
-                );
-            };
-            chatService.onUserJoined(notificationAction);
-            chatService.onUserLeft(notificationAction);
-            chatService.onReceiveMessage((message) => {
-                setMessages((previousState) => [...previousState, message]);
-            });
-            setChatService(chatService);
+            setTimeout(
+                () =>
+                    setChatNotifications((previousState) =>
+                        previousState.filter(
+                            (notification) =>
+                                notification !== notificationMessage
+                        )
+                    ),
+                6000
+            );
         };
-        setupChatAsync();
-        const cleanup = async () => {
-            await chatService.disconect();
-        };
+        chatService.onUserJoined(notificationAction);
+        chatService.onUserLeft(notificationAction);
+        chatService.onReceiveMessage((message) => {
+            setMessages((previousState) => [...previousState, message]);
+        });
+
         return () => {
-            cleanup();
+            if (id !== undefined) {
+                chatService.leaveChannel(id, user.username);
+            }
+            chatService.disconect();
         };
-    }, [id]);
+    }, [chatService, user]);
 
     useEffect(() => {
-        const leaveChannel = async () => {
-            if (
-                previousChat !== undefined &&
-                chatService.connection.state === HubConnectionState.Connected
-            ) {
-                await chatService.leaveChannelAsync(
-                    previousChat,
-                    user.username
-                );
-            }
-        };
-        leaveChannel();
-    }, [id]);
+        if (id !== undefined) {
+            chatService.joinChannel(id, user.username);
+        }
+    }, [id, chatService, user]);
 
-    const handleSend = async (inputValue: string) => {
+    useEffect(() => {
+        if (previousChat !== undefined && previousChat !== id) {
+            chatService.leaveChannel(previousChat, user.username);
+        }
+    }, [id, user]);
+
+    const handleSend = (inputValue: string) => {
         const message: Message = {
             channelId: id ?? '',
             sender: user.username,
             content: inputValue,
             date: new Date(),
         };
-        await chatService.sendMessageAsync(message);
+        chatService.sendMessage(message);
     };
 
     return (

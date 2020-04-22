@@ -1,41 +1,76 @@
 import * as signalR from '@microsoft/signalr';
 import Message from '../models/Message';
+import { Queue } from '../utils/Queue';
 
 export interface IChatService {
-    readonly connection: signalR.HubConnection;
-    joinChannelAsync(channelId: string, username: string): Promise<void>;
-    leaveChannelAsync(channelId: string, username: string): Promise<void>;
+    joinChannel(channelId: string, username: string): void;
+    leaveChannel(channelId: string, username: string): void;
     onUserJoined(action: (notification: string) => void): void;
     onUserLeft(action: (notification: string) => void): void;
     onReceiveMessage(action: (message: Message) => void): void;
-    sendMessageAsync(message: Message): Promise<void>;
+    sendMessage(message: Message): void;
     disconect(): Promise<void>;
 }
 
+type EventType = {
+    method: string;
+    args: any[];
+};
+
 export class ChatService implements IChatService {
     readonly connection: signalR.HubConnection;
+    private readonly eventQueue: Queue<EventType>;
 
     constructor(url: string) {
+        this.eventQueue = new Queue<EventType>(() => {
+            this.processEventQueue();
+        });
         this.connection = new signalR.HubConnectionBuilder()
             .withUrl(url)
             .withAutomaticReconnect()
             .build();
+        this.connection.onreconnected((connectionId) => {
+            this.processEventQueue();
+        });
+        this.connect();
     }
+
+    async connect(): Promise<void> {
+        await this.connection.start();
+        this.processEventQueue();
+    }
+
     async disconect(): Promise<void> {
         this.connection.off('userJoined');
+        this.connection.off('userLeave');
         this.connection.off('receiveMessage');
         await this.connection.stop();
     }
 
-    async joinChannelAsync(channelId: string, username: string): Promise<void> {
-        await this.connection.send('joinChat', channelId, username);
+    private async processEventQueue() {
+        while (
+            !this.eventQueue.empty() &&
+            this.connection.state === signalR.HubConnectionState.Connected
+        ) {
+            const event = this.eventQueue.popFront();
+            if (event !== undefined) {
+                await this.connection.send(event.method, ...event.args);
+            }
+        }
     }
 
-    async leaveChannelAsync(
-        channelId: string,
-        username: string
-    ): Promise<void> {
-        await this.connection.send('leaveChat', channelId, username);
+    joinChannel(channelId: string, username: string): void {
+        this.eventQueue.pushBack({
+            method: 'joinChat',
+            args: [channelId, username],
+        });
+    }
+
+    leaveChannel(channelId: string, username: string): void {
+        this.eventQueue.pushBack({
+            method: 'leaveChat',
+            args: [channelId, username],
+        });
     }
 
     onUserJoined(action: (notification: string) => void): void {
@@ -54,7 +89,10 @@ export class ChatService implements IChatService {
         this.connection.on('receiveMessage', action);
     }
 
-    async sendMessageAsync(message: Message): Promise<void> {
-        await this.connection.send('sendMessage', message);
+    sendMessage(message: Message): void {
+        this.eventQueue.pushBack({
+            method: 'sendMessage',
+            args: [message],
+        });
     }
 }
