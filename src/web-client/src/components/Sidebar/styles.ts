@@ -18,6 +18,7 @@ export const getSidebarStyles = cretaeStyle<ISidebarClassNames>({
         height: 'max-content',
         borderRadius: 4,
         color: '#fff',
+        wordBreak: 'break-word',
         selectors: {
             ':hover': {
                 cursor: 'pointer',
