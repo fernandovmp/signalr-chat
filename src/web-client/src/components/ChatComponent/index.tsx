@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import ChatInputArea from './ChatInputArea';
-import { ChatService } from '../../services';
 import Message from '../../models/Message';
 import MessageBalloon from './MessageBalloon';
 import useLocalStorage from '../../hooks/useLocalStorage';
@@ -9,6 +8,7 @@ import usePrevious from '../../hooks/usePrevious';
 import { ChatNotification } from './ChatNotification';
 import { getChatComponentStyles } from './styles';
 import { useParams } from 'react-router-dom';
+import { useChatService } from '../../hooks/useChatService';
 
 export const ChatComponent: React.FC = () => {
     const [user] = useLocalStorage<User>('user', {
@@ -24,9 +24,7 @@ export const ChatComponent: React.FC = () => {
     } = getChatComponentStyles();
     const { id } = useParams();
     const previousChat = usePrevious(id);
-    const [chatService] = useState(
-        new ChatService('https://localhost:5001/chatHub')
-    );
+    const chatService = useChatService();
 
     useEffect(() => {
         const notificationAction = (notificationMessage: string) => {
