@@ -22,6 +22,7 @@ export const ChatComponent: React.FC = () => {
         chatComponent,
         notificationsContainer,
         chatMessages,
+        senderMessage,
     } = getChatComponentStyles();
     const { id } = useParams();
     const previousChat = usePrevious(id);
@@ -87,6 +88,11 @@ export const ChatComponent: React.FC = () => {
                     .map((message) => (
                         <MessageBalloon
                             key={`${message.date}-${message.sender}`}
+                            styles={
+                                message.sender.id === user.id
+                                    ? [senderMessage]
+                                    : undefined
+                            }
                             message={message}
                         />
                     ))}

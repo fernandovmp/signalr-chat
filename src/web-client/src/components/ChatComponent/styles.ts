@@ -4,6 +4,7 @@ export interface IChatComponentClassNames {
     chatMessages: string;
     chatComponent: string;
     notificationsContainer: string;
+    senderMessage: string;
 }
 
 export const getChatComponentStyles = cretaeStyle<IChatComponentClassNames>({
@@ -34,5 +35,8 @@ export const getChatComponentStyles = cretaeStyle<IChatComponentClassNames>({
         alignItems: 'flex-end',
         justifyContent: 'flex-end',
         marginRight: 15,
+    },
+    senderMessage: {
+        alignSelf: 'flex-end',
     },
 });
