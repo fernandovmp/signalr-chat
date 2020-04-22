@@ -9,6 +9,7 @@ import { ChatNotification } from './ChatNotification';
 import { getChatComponentStyles } from './styles';
 import { useParams } from 'react-router-dom';
 import { useChatService } from '../../hooks/useChatService';
+import SendMessageModel from '../../models/SendMessageModel';
 
 export const ChatComponent: React.FC = () => {
     const [user] = useLocalStorage<User>('user', {
@@ -69,9 +70,9 @@ export const ChatComponent: React.FC = () => {
     }, [id, user]);
 
     const handleSend = (inputValue: string) => {
-        const message: Message = {
+        const message: SendMessageModel = {
             channelId: id ?? '',
-            sender: user.username,
+            senderId: user.id,
             content: inputValue,
             date: new Date(),
         };

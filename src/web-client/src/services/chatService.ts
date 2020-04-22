@@ -1,6 +1,7 @@
 import * as signalR from '@microsoft/signalr';
 import Message from '../models/Message';
 import { Queue } from '../utils/Queue';
+import SendMessageModel from '../models/SendMessageModel';
 
 export interface IChatService {
     joinChannel(channelId: string, username: string): void;
@@ -8,7 +9,7 @@ export interface IChatService {
     onUserJoined(action: (notification: string) => void): void;
     onUserLeft(action: (notification: string) => void): void;
     onReceiveMessage(action: (message: Message) => void): void;
-    sendMessage(message: Message): void;
+    sendMessage(message: SendMessageModel): void;
     disconect(): Promise<void>;
 }
 
@@ -89,7 +90,7 @@ export class ChatService implements IChatService {
         this.connection.on('receiveMessage', action);
     }
 
-    sendMessage(message: Message): void {
+    sendMessage(message: SendMessageModel): void {
         this.eventQueue.pushBack({
             method: 'sendMessage',
             args: [message],
