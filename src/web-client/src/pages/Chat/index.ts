@@ -1,4 +1,4 @@
-import { ChatComponent } from '../../components';
+import { ChatComponent, SideBar } from '../../components';
 import { PageRoute } from '../../utils/PageRouteType';
 import { ChatHeader } from '../../components/ChatComponent/ChatHeader';
 
@@ -7,4 +7,5 @@ export const ChatPage: PageRoute = {
     exact: false,
     header: ChatHeader,
     main: ChatComponent,
+    sidebar: SideBar,
 };

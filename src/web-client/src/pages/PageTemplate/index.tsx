@@ -1,5 +1,4 @@
 import React from 'react';
-import { SideBar } from '../../components';
 import { Switch, Route } from 'react-router-dom';
 import { PageRoute } from '../../utils/PageRouteType';
 import { getPageTemplateStyles } from './styles';
@@ -17,7 +16,16 @@ const PageTemplate: React.FC<propsType> = ({ routes }) => {
     } = getPageTemplateStyles();
     return (
         <div className={pageTemplate}>
-            <SideBar styles={[pageSideBar]} />
+            <Switch>
+                {routes.map((page, index) => (
+                    <Route
+                        key={index}
+                        path={page.path}
+                        exact={page.exact}
+                        children={<page.sidebar styles={[pageSideBar]} />}
+                    />
+                ))}
+            </Switch>
             <header className={pageHeader}>
                 <Switch>
                     {routes.map((page, index) => (
