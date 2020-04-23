@@ -22,9 +22,11 @@ namespace SignalRChat.Server.Controllers
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ListChannelsQueryResult>>> ListChats(
-            [FromHeader] Guid authorization)
+            [FromHeader] Guid authorization, int page = 1, int size = 10)
         {
-            return Ok(await _chatRepository.ListUserChats(authorization));
+            PagedList<ListUserChatsQueryResult> pagedList = await _chatRepository
+                .ListUserChatsPaginated(authorization, page, size);
+            return Ok(pagedList);
         }
 
         [HttpGet("{id}")]

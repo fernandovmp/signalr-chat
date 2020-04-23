@@ -29,16 +29,30 @@ namespace SignalRChat.Infrastructure.Data.Repositories
             });
         }
 
-        public async Task<IEnumerable<ListUserChatsQueryResult>> ListUserChats(Guid userId)
+        public async Task<PagedList<ListUserChatsQueryResult>> ListUserChatsPaginated(Guid userId, int page, int pageSize)
         {
             string query = "select channels.id, channels.name, users_channels.isAdministrator "
                 + "from users_channels "
                 + "inner join channels on channels.id = users_channels.channelId "
+                + "where users_channels.userId = @UserId "
+                + "order by users_channels.createdOn desc "
+                + "OFFSET @Offset ROWS "
+                + "FETCH next @PageSize Rows ONLY\n"
+                + "select COUNT(*) from users_channels "
                 + "where users_channels.userId = @UserId";
-            return await _connection.QueryAsync<ListUserChatsQueryResult>(query, new
+            int offset = (page - 1) * pageSize;
+            IEnumerable<ListUserChatsQueryResult> result;
+            using (SqlMapper.GridReader gridReader = await _connection.QueryMultipleAsync(query, new
             {
+                PageSize = pageSize,
+                Offset = offset,
                 UserId = userId
-            });
+            }))
+            {
+                result = gridReader.Read<ListUserChatsQueryResult>();
+                int totalCount = await gridReader.ReadFirstAsync<int>();
+                return new PagedList<ListUserChatsQueryResult>(page, pageSize, totalCount, result);
+            }
         }
     }
 }

@@ -7,7 +7,7 @@ namespace SignalRChat.Domain.Repositories
 {
     public interface IChatRepository
     {
-        Task<IEnumerable<ListUserChatsQueryResult>> ListUserChats(Guid userId);
+        Task<PagedList<ListUserChatsQueryResult>> ListUserChatsPaginated(Guid userId, int page, int pageSize);
         Task<ListUserChatsQueryResult> GetUserChat(Guid userId, Guid chatId);
     }
 }
