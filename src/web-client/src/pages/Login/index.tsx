@@ -7,6 +7,7 @@ import { getCommonStyles } from '../../styles/commonStyles';
 import { useChatApiService } from '../../hooks/useChatApiService';
 import ErrorModel from '../../models/ErrorModel';
 import { InputField, ErrorBox } from '../../components';
+import { validateUsername } from '../../validations';
 
 const LoginPage: React.FC = () => {
     const [user, setUser] = useLocalStorage<User>('user', {
@@ -24,27 +25,11 @@ const LoginPage: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (usernameInputValue.trim() === '') {
+        const validUsername = validateUsername(usernameInputValue);
+        if (!validUsername.valid) {
             setError({
                 message: 'Invalid input',
-                errors: [
-                    {
-                        property: 'Username',
-                        message: "Username can't be white spaces",
-                    },
-                ],
-            });
-            return;
-        }
-        if (usernameInputValue.trim().length > 32) {
-            setError({
-                message: 'Invalid input',
-                errors: [
-                    {
-                        property: 'Username',
-                        message: 'Username should be at maximum 32 characters',
-                    },
-                ],
+                errors: validUsername.errors,
             });
             return;
         }
