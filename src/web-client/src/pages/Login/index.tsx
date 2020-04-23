@@ -6,6 +6,7 @@ import { getLoginPageStyles } from './styles';
 import { getCommonStyles } from '../../styles/commonStyles';
 import { useChatApiService } from '../../hooks/useChatApiService';
 import ErrorModel from '../../models/ErrorModel';
+import { InputField, ErrorBox } from '../../components';
 
 const LoginPage: React.FC = () => {
     const [user, setUser] = useLocalStorage<User>('user', {
@@ -15,19 +16,44 @@ const LoginPage: React.FC = () => {
     const [usernameInputValue, setUsernameInputValue] = useState<string>(
         user.username
     );
+    const [error, setError] = useState<ErrorModel>();
     const chatApiService = useChatApiService();
     const history = useHistory();
-    const { formButton, formInput, formLabel } = getCommonStyles();
+    const { formButton } = getCommonStyles();
     const { loginForm } = getLoginPageStyles();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (usernameInputValue.trim() === '') return;
+        if (usernameInputValue.trim() === '') {
+            setError({
+                message: 'Invalid input',
+                errors: [
+                    {
+                        property: 'Username',
+                        message: "Username can't be white spaces",
+                    },
+                ],
+            });
+            return;
+        }
+        if (usernameInputValue.trim().length > 32) {
+            setError({
+                message: 'Invalid input',
+                errors: [
+                    {
+                        property: 'Username',
+                        message: 'Username should be at maximum 32 characters',
+                    },
+                ],
+            });
+            return;
+        }
         let authenticatedUser: User;
         let response = await chatApiService.authenticate(usernameInputValue);
-        if (response as ErrorModel) {
+        if ((response as ErrorModel).message) {
             response = await chatApiService.createUser(usernameInputValue);
-            if (response as ErrorModel) {
+            if ((response as ErrorModel).message) {
+                setError(response as ErrorModel);
                 return;
             }
             authenticatedUser = response as User;
@@ -41,14 +67,17 @@ const LoginPage: React.FC = () => {
 
     return (
         <form className={loginForm} onSubmit={handleSubmit}>
-            <label className={formLabel}>
-                Username
-                <input
-                    className={formInput}
-                    value={usernameInputValue}
-                    onChange={(e) => setUsernameInputValue(e.target.value)}
-                />
-            </label>
+            {error !== undefined && <ErrorBox message={error.message} />}
+            <InputField
+                fieldLabel="Username"
+                onChange={setUsernameInputValue}
+                value={usernameInputValue}
+                errors={error?.errors
+                    ?.filter(
+                        (propertyError) => propertyError.property === 'Username'
+                    )
+                    .map((propertyError) => propertyError.message)}
+            />
             <button className={formButton} type="submit">
                 LOGIN
             </button>
