@@ -1,7 +1,4 @@
-interface ErrorData {
-    property: string;
-    message: string;
-}
+import { ErrorData } from './ErrorData';
 
 export default interface ErrorModel {
     message: string;

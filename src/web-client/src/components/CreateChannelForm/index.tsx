@@ -9,6 +9,7 @@ import Channel from '../../models/Channel';
 import { InputField } from '../InputField';
 import ErrorModel from '../../models/ErrorModel';
 import { ErrorBox } from '../ErrorBox';
+import { ErrorData } from '../../models/ErrorData';
 
 export const CreateChannelForm: React.FC = () => {
     const [channelName, setChannelName] = useState('');
@@ -25,7 +26,7 @@ export const CreateChannelForm: React.FC = () => {
 
     const handleValidations = () => {
         let valid = true;
-        const inputErrors = [];
+        const inputErrors: ErrorData[] = [];
         if (channelName.trim() === '') {
             inputErrors.push({
                 property: 'Name',
