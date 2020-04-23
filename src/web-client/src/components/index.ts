@@ -4,3 +4,4 @@ export * from './CreateChannelForm';
 export * from './Sidebar';
 export * from './Sidebar/ChatItem';
 export * from './PopupComponent';
+export * from './ErrorBox';
