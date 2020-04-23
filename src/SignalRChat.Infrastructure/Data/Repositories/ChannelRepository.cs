@@ -107,5 +107,40 @@ namespace SignalRChat.Infrastructure.Data.Repositories
             });
             return result.HasValue;
         }
+
+        public async Task<PagedList<ListChannelsQueryResult>> ListChannelsPaginated(int page, int pageSize)
+        {
+            string query = "select channels.id, channels.name, channels.description, "
+                + "users.id as 'administratorId', users.username as 'administratorUsername' "
+                + "from channels "
+                + "inner join users on users.id = channels.administratorId "
+                + "order by channels.createdOn "
+                + "OFFSET @Offset ROWS "
+                + "FETCH next @PageSize Rows ONLY\n"
+                + "select COUNT(*) from channels";
+            int offset = (page - 1) * pageSize;
+            IEnumerable<ListChannelsQueryResult> result;
+            using (SqlMapper.GridReader gridReader = await _connection.QueryMultipleAsync(query, new
+            {
+                PageSize = pageSize,
+                Offset = offset
+            }))
+            {
+                result = gridReader.Read<ListChannelsQueryResult, ListChannelsUsersJoinResult, ListChannelsQueryResult>(
+                    (channel, administrator) =>
+                    {
+                        channel.Administrator = new ListUsersQueryResult
+                        {
+                            Id = administrator.AdministratorId,
+                            Username = administrator.AdministratorUsername
+                        };
+                        return channel;
+                    },
+                    splitOn: "administratorId"
+                );
+                int totalCount = await gridReader.ReadFirstAsync<int>();
+                return new PagedList<ListChannelsQueryResult>(page, pageSize, totalCount, result);
+            }
+        }
     }
 }

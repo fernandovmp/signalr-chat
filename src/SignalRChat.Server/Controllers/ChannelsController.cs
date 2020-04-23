@@ -22,9 +22,11 @@ namespace SignalRChat.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ListChannelsQueryResult>>> ListChannels()
+        public async Task<ActionResult<PagedList<ListChannelsQueryResult>>> ListChannels(int page = 1, int size = 10)
         {
-            return Ok(await _channelRepository.ListChannels());
+            PagedList<ListChannelsQueryResult> pagedList = await _channelRepository
+                .ListChannelsPaginated(page, size);
+            return Ok(pagedList);
         }
 
         [HttpGet("{id}")]
