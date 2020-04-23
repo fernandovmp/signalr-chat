@@ -9,7 +9,10 @@ import Channel from '../../models/Channel';
 import { InputField } from '../InputField';
 import ErrorModel from '../../models/ErrorModel';
 import { ErrorBox } from '../ErrorBox';
-import { ErrorData } from '../../models/ErrorData';
+import {
+    validateChannelName,
+    validateChannelDescription,
+} from '../../validations';
 
 export const CreateChannelForm: React.FC = () => {
     const [channelName, setChannelName] = useState('');
@@ -25,36 +28,16 @@ export const CreateChannelForm: React.FC = () => {
     const { createChannelForm } = getCreateChannelFormStyles();
 
     const handleValidations = () => {
-        let valid = true;
-        const inputErrors: ErrorData[] = [];
-        if (channelName.trim() === '') {
-            inputErrors.push({
-                property: 'Name',
-                message: "Channel name can't be null or white spaces",
-            });
-            valid = false;
-        }
-        if (channelName.trim().length > 32) {
-            inputErrors.push({
-                property: 'Name',
-                message: 'Channel name should be at maximum 32 characters',
-            });
-            valid = false;
-        }
-        if (channelDescription.length > 100) {
-            inputErrors.push({
-                property: 'Description',
-                message:
-                    'Channel description should be at maximum 100 characters',
-            });
-        }
-        if (!valid) {
+        const validName = validateChannelName(channelName);
+        const validDescription = validateChannelDescription(channelDescription);
+        if (!(validName.valid && validDescription.valid)) {
             setError({
                 message: 'Invalid input',
-                errors: inputErrors,
+                errors: [...validName.errors, ...validDescription.errors],
             });
+            return false;
         }
-        return valid;
+        return true;
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
