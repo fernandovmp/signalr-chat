@@ -10,6 +10,7 @@ type propsType = {
     inputValue: string;
     setInputValue: React.Dispatch<React.SetStateAction<string>>;
     onSave: () => void;
+    errors?: string[];
 };
 
 export const EditableField: React.FC<propsType> = ({
@@ -17,10 +18,11 @@ export const EditableField: React.FC<propsType> = ({
     inputValue,
     setInputValue,
     onSave,
+    errors,
 }) => {
     const [editEnabled, setEditEnabled] = useState(false);
     const { formInput, formLabel, transparentButton } = getCommonStyles();
-    const { editInput } = getEditableFieldStyles();
+    const { editInput, inputError } = getEditableFieldStyles();
 
     const handleSave = () => {
         setEditEnabled(false);
@@ -52,6 +54,11 @@ export const EditableField: React.FC<propsType> = ({
                     </button>
                 )}
             </div>
+            {errors?.map((error, index) => (
+                <p key={index} className={inputError}>
+                    {error}
+                </p>
+            ))}
         </label>
     );
 };

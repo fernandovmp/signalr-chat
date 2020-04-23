@@ -2,6 +2,7 @@ import { cretaeStyle } from '../../../styles/createStyle';
 
 interface IEditableFieldClassNames {
     editInput: string;
+    inputError: string;
 }
 
 export const getEditableFieldStyles = cretaeStyle<IEditableFieldClassNames>({
@@ -12,5 +13,11 @@ export const getEditableFieldStyles = cretaeStyle<IEditableFieldClassNames>({
                 flexGrow: 1,
             },
         },
+    },
+    inputError: {
+        marginLeft: 8,
+        marginTop: 4,
+        color: 'red',
+        fontSize: 'small',
     },
 });
