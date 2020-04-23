@@ -5,6 +5,7 @@ import User from '../../models/User';
 import { getLoginPageStyles } from './styles';
 import { getCommonStyles } from '../../styles/commonStyles';
 import { useChatApiService } from '../../hooks/useChatApiService';
+import ErrorModel from '../../models/ErrorModel';
 
 const LoginPage: React.FC = () => {
     const [user, setUser] = useLocalStorage<User>('user', {
@@ -23,19 +24,15 @@ const LoginPage: React.FC = () => {
         e.preventDefault();
         if (usernameInputValue.trim() === '') return;
         let authenticatedUser: User;
-        try {
-            authenticatedUser = await chatApiService.authenticate(
-                usernameInputValue
-            );
-        } catch (error) {
-            try {
-                authenticatedUser = await chatApiService.createUser(
-                    usernameInputValue
-                );
-            } catch (error) {
-                console.error(error);
+        let response = await chatApiService.authenticate(usernameInputValue);
+        if (response as ErrorModel) {
+            response = await chatApiService.createUser(usernameInputValue);
+            if (response as ErrorModel) {
                 return;
             }
+            authenticatedUser = response as User;
+        } else {
+            authenticatedUser = response as User;
         }
         setUser(authenticatedUser);
         //Wait for useEffect/ComponentDidMount call of useLocalStorage

@@ -3,28 +3,30 @@ import ErrorModel from '../models/ErrorModel';
 import Channel from '../models/Channel';
 import Chat from '../models/Chat';
 
+type Success = 'Success';
+
 export interface IChatApiService {
-    createUser(username: string): Promise<User>;
-    authenticate(username: string): Promise<User>;
+    createUser(username: string): Promise<User | ErrorModel>;
+    authenticate(username: string): Promise<User | ErrorModel>;
     getChannelsAsync(): Promise<Channel[]>;
     createChannelAsync(
         name: string,
         description: string,
         administratorId: string
-    ): Promise<Channel>;
+    ): Promise<Channel | ErrorModel>;
     updateChannelName(
         channelId: string,
         name: string,
         administratorId: string
-    ): Promise<void>;
+    ): Promise<Success | ErrorModel>;
     updateDescriptionName(
         channelId: string,
         administratorId: string,
         description?: string
-    ): Promise<void>;
+    ): Promise<Success | ErrorModel>;
     getUserChats(user: User): Promise<Chat[]>;
     getChannel(channelId: string): Promise<Channel>;
-    joinChannel(channel: Channel, user: User): Promise<void>;
+    joinChannel(channel: Channel, user: User): Promise<Success | ErrorModel>;
     getChat(chatId: string, user: User): Promise<Chat>;
 }
 
@@ -39,8 +41,11 @@ export class ChatApiService implements IChatApiService {
         });
         return response.json();
     }
-    async joinChannel(channel: Channel, user: User): Promise<void> {
-        await fetch(`${this.baseUrl}/chats`, {
+    async joinChannel(
+        channel: Channel,
+        user: User
+    ): Promise<Success | ErrorModel> {
+        const response = await fetch(`${this.baseUrl}/chats`, {
             method: 'POST',
             headers: [
                 ['Content-Type', 'application/json'],
@@ -50,6 +55,10 @@ export class ChatApiService implements IChatApiService {
                 channelId: channel.id,
             }),
         });
+        if (response.status !== 204) {
+            return this.getErrors(response);
+        }
+        return 'Success';
     }
     async getChannel(channelId: string): Promise<Channel> {
         const response = await fetch(`${this.baseUrl}/channels/${channelId}`);
@@ -82,7 +91,7 @@ export class ChatApiService implements IChatApiService {
     private async getErrors(response: Response): Promise<ErrorModel> {
         return response.json();
     }
-    async createUser(username: string): Promise<User> {
+    async createUser(username: string): Promise<User | ErrorModel> {
         const response = await fetch(`${this.baseUrl}/users`, {
             method: 'POST',
             headers: [['Content-Type', 'application/json']],
@@ -91,12 +100,11 @@ export class ChatApiService implements IChatApiService {
             }),
         });
         if (!response.ok) {
-            const error = await this.getErrors(response);
-            throw new Error(error.message);
+            return await this.getErrors(response);
         }
         return response.json();
     }
-    async authenticate(username: string): Promise<User> {
+    async authenticate(username: string): Promise<User | ErrorModel> {
         const response = await fetch(`${this.baseUrl}/users/authenticate`, {
             method: 'POST',
             headers: [['Content-Type', 'application/json']],
@@ -105,8 +113,7 @@ export class ChatApiService implements IChatApiService {
             }),
         });
         if (!response.ok) {
-            const error = await this.getErrors(response);
-            throw new Error(error.message);
+            return await this.getErrors(response);
         }
         return response.json();
     }
@@ -118,7 +125,7 @@ export class ChatApiService implements IChatApiService {
         channelId: string,
         name: string,
         administratorId: string
-    ): Promise<void> {
+    ): Promise<Success | ErrorModel> {
         const response = await fetch(
             `${this.baseUrl}/channels/${channelId}/name`,
             {
@@ -133,15 +140,15 @@ export class ChatApiService implements IChatApiService {
             }
         );
         if (response.status !== 204) {
-            const error = await this.getErrors(response);
-            throw new Error(error.message);
+            return await this.getErrors(response);
         }
+        return 'Success';
     }
     async updateDescriptionName(
         channelId: string,
         administratorId: string,
         description?: string
-    ): Promise<void> {
+    ): Promise<Success | ErrorModel> {
         const response = await fetch(
             `${this.baseUrl}/channels/${channelId}/description`,
             {
@@ -156,8 +163,8 @@ export class ChatApiService implements IChatApiService {
             }
         );
         if (response.status !== 204) {
-            const error = await this.getErrors(response);
-            throw new Error(error.message);
+            return await this.getErrors(response);
         }
+        return 'Success';
     }
 }

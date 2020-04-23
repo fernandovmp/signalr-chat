@@ -5,6 +5,7 @@ import { getCommonStyles } from '../../styles/commonStyles';
 import { getCreateChannelFormStyles } from './styles';
 import { useChatApiService } from '../../hooks/useChatApiService';
 import { useHistory } from 'react-router-dom';
+import Channel from '../../models/Channel';
 
 export const CreateChannelForm: React.FC = () => {
     const [channelName, setChannelName] = useState('');
@@ -20,12 +21,15 @@ export const CreateChannelForm: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const channel = await chatApiService.createChannelAsync(
+        const response = await chatApiService.createChannelAsync(
             channelName,
             channelDescription,
             user.id
         );
-        history.push(`/chat/${channel.id}`);
+        const channel = response as Channel;
+        if (channel.id) {
+            history.push(`/chat/${channel.id}`);
+        }
     };
 
     return (
