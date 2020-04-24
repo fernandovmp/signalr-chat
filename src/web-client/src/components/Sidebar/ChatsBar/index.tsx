@@ -33,8 +33,8 @@ export const ChatsBar: React.FC<propsType> = ({ styles }) => {
 
     useEffect(() => {
         const getChannels = async () => {
-            const chats = await chatApiService.getUserChats(user);
-            setChats(chats);
+            const pagedChats = await chatApiService.getUserChats(user, 1, 5);
+            setChats(pagedChats.result);
         };
         getChannels();
     }, [chatApiService, user]);

@@ -11,8 +11,8 @@ export const ExploreMain: React.FC = () => {
 
     useEffect(() => {
         const getChannels = async () => {
-            const channels = await chatApiService.getChannelsAsync();
-            setChannels(channels);
+            const pagedChannels = await chatApiService.getChannelsAsync(1, 5);
+            setChannels(pagedChannels.result);
         };
         getChannels();
     }, [chatApiService]);

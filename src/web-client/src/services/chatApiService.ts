@@ -2,13 +2,17 @@ import User from '../models/User';
 import ErrorModel from '../models/ErrorModel';
 import Channel from '../models/Channel';
 import Chat from '../models/Chat';
+import PaginatedList from '../models/PaginatedList';
 
 type Success = 'Success';
 
 export interface IChatApiService {
     createUser(username: string): Promise<User | ErrorModel>;
     authenticate(username: string): Promise<User | ErrorModel>;
-    getChannelsAsync(): Promise<Channel[]>;
+    getChannelsAsync(
+        page: number,
+        pageSize: number
+    ): Promise<PaginatedList<Channel>>;
     createChannelAsync(
         name: string,
         description: string,
@@ -24,7 +28,11 @@ export interface IChatApiService {
         administratorId: string,
         description?: string
     ): Promise<Success | ErrorModel>;
-    getUserChats(user: User): Promise<Chat[]>;
+    getUserChats(
+        user: User,
+        page: number,
+        pageSize: number
+    ): Promise<PaginatedList<Chat>>;
     getChannel(channelId: string): Promise<Channel>;
     joinChannel(channel: Channel, user: User): Promise<Success | ErrorModel>;
     getChat(chatId: string, user: User): Promise<Chat>;
@@ -64,10 +72,17 @@ export class ChatApiService implements IChatApiService {
         const response = await fetch(`${this.baseUrl}/channels/${channelId}`);
         return response.json();
     }
-    async getUserChats(user: User): Promise<Chat[]> {
-        const response = await fetch(`${this.baseUrl}/chats`, {
-            headers: [['Authorization', user.id]],
-        });
+    async getUserChats(
+        user: User,
+        page: number,
+        pageSize: number
+    ): Promise<PaginatedList<Chat>> {
+        const response = await fetch(
+            `${this.baseUrl}/chats?page=${page}&size=${pageSize}`,
+            {
+                headers: [['Authorization', user.id]],
+            }
+        );
         return response.json();
     }
     async createChannelAsync(
@@ -117,8 +132,13 @@ export class ChatApiService implements IChatApiService {
         }
         return response.json();
     }
-    async getChannelsAsync(): Promise<Channel[]> {
-        const response = await fetch(`${this.baseUrl}/channels`);
+    async getChannelsAsync(
+        page: number,
+        pageSize: number
+    ): Promise<PaginatedList<Channel>> {
+        const response = await fetch(
+            `${this.baseUrl}/channels?page=${page}&size=${pageSize}`
+        );
         return response.json();
     }
     async updateChannelName(
