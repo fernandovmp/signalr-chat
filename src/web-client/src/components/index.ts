@@ -6,3 +6,4 @@ export * from './Sidebar/ChatItem';
 export * from './PopupComponent';
 export * from './ErrorBox';
 export * from './InputField';
+export * from './Pagination';
