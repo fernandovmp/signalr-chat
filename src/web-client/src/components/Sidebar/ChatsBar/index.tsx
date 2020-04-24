@@ -21,26 +21,48 @@ type propsType = {
     styles?: IChatsBarStyles;
 };
 
+const pageSize = 5;
+
 export const ChatsBar: React.FC<propsType> = ({ styles }) => {
     const [user] = useLocalStorage<User>('user', {
         id: '',
         username: '',
     });
     const [chats, setChats] = useState<Chat[]>([]);
+    const [totalCount, setTotalCount] = useState(0);
+    const [currentPage, setCurretPage] = useState(1);
     const chatApiService = useChatApiService();
     const { id } = useParams();
-    const { chatList, chatSelected } = getChatsBarStyles();
+    const { chatBar, chatList, chatSelected, showMore } = getChatsBarStyles();
 
     useEffect(() => {
         const getChannels = async () => {
-            const pagedChats = await chatApiService.getUserChats(user, 1, 5);
+            const pagedChats = await chatApiService.getUserChats(
+                user,
+                1,
+                pageSize
+            );
             setChats(pagedChats.result);
+            setTotalCount(pagedChats.totalCount);
+            setCurretPage(1);
         };
         getChannels();
     }, [chatApiService, user]);
 
+    const handleShowMore = async () => {
+        const nextPage = currentPage + 1;
+        const pagedChats = await chatApiService.getUserChats(
+            user,
+            nextPage,
+            pageSize
+        );
+        setChats((previousState) => [...previousState, ...pagedChats.result]);
+        setTotalCount(pagedChats.totalCount);
+        setCurretPage(nextPage);
+    };
+
     return (
-        <div className={styles?.root?.join(' ')}>
+        <div className={`${chatBar} ${styles?.root?.join(' ')}`}>
             <ul className={chatList}>
                 {chats.map((chat) => (
                     <li
@@ -51,6 +73,11 @@ export const ChatsBar: React.FC<propsType> = ({ styles }) => {
                     </li>
                 ))}
             </ul>
+            {chats.length < totalCount && (
+                <p className={showMore} onClick={handleShowMore}>
+                    Show more
+                </p>
+            )}
         </div>
     );
 };
