@@ -10,15 +10,20 @@ export const getExploreMainStyles = cretaeStyle<IExploreMainClassNames>({
     channelsList: {
         listStyle: 'none',
         padding: 0,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
         selectors: {
             '> li': {
-                margin: '10px 20%',
+                margin: '10px 0',
+                width: '100%',
                 maxWidth: 500,
             },
         },
     },
     exploreMain: {
-        overflowY: 'scroll',
+        overflowY: 'auto',
+        background: '#eee',
         height: '100%',
     },
     emptyListText: {
