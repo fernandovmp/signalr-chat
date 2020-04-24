@@ -13,6 +13,7 @@ export const getChannelItemStyles = cretaeStyle<IChannelItemClassNames>({
         display: 'flex',
         flexDirection: 'row',
         border: '1px solid #b700ff',
+        background: 'white',
         borderRadius: 4,
     },
     descriptionSection: {
