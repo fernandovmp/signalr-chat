@@ -14,9 +14,9 @@ Real-time chat application with multiple channels
 
 ## Built with
 
--   [SignalR](https://dotnet.microsoft.com/apps/aspnet/signalr): ASP NET Core library to real-time comunication
+-   [SignalR](https://dotnet.microsoft.com/apps/aspnet/signalr): ASP NET Core library to real-time communication
 -   Backend
-    -   [ASP NET Core](https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-3.1): Cross-plataform framework to build web apps
+    -   [ASP NET Core](https://docs.microsoft.com/en-us/aspnet/core/?view=aspnetcore-3.1): Cross-platform framework to build web apps
     -   [SQL SERVER](https://www.microsoft.com/en-us/sql-server): Microsoft Relational Database
     -   [Fluent Migrator](https://github.com/fluentmigrator/fluentmigrator): Migration framework to .NET
     -   [Dapper](https://dapper-tutorial.net/dapper): Micro ORM
@@ -25,7 +25,7 @@ Real-time chat application with multiple channels
         -   [xUnit](https://xunit.net/): Unit testing tool for the .NET
         -   [Fluent Assertions](https://fluentassertions.com/): Fluent API for asserting the results of unit tests
         -   [Moq](https://github.com/moq/moq): Mocking framework for .NET
--   Fontend
+-   Frontend
     -   [ReactJS](https://reactjs.org/): JavaScript library for building user interfaces
     -   [Typescript](https://www.typescriptlang.org/): Typed superset of JavaScript
     -   [React Router DOM](https://reacttraining.com/react-router/web/guides/quick-start): Declarative routing for React
